@@ -13,7 +13,7 @@ const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader
 
 
 const config = {
-    entry: './src/index.ts',
+    entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
     },
@@ -33,7 +33,7 @@ const config = {
         rules: [
             {
                 test: /\.(ts|tsx)$/i,
-                loader: 'ts-loader',
+                loader: 'babel-loader',
                 exclude: ['/node_modules/'],
             },
             {
@@ -47,7 +47,12 @@ const config = {
             {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
                 type: 'asset',
-            },
+            }, 
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            }
 
             // Add your rules for custom modules here
             // Learn more about loaders from https://webpack.js.org/loaders/
@@ -56,6 +61,14 @@ const config = {
     resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
     },
+
+    devServer: {
+        historyApiFallback: true,
+        hot: true,
+        static: {
+          directory: path.join(__dirname, 'dist')
+        },
+      }
 };
 
 module.exports = () => {
