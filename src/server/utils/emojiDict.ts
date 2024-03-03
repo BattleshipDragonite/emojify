@@ -1,12 +1,4 @@
-// import {randomInteger, randomElement} from './helpers'
-
-const randomElement = (array : string[]) => {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
-const randomInteger = (min : number, max : number) : number => {
-  return min + Math.floor((Math.random() * (max - min + 1)))
-}
+import {randomInteger, randomElement} from './helpers'
 
 interface GenreMap {
   [key: string]: { type: string; value: string };
@@ -164,9 +156,7 @@ const createRandomEmojiQuery = () : string => {
   return query;
 }
 
-
-const test = createRandomEmojiQuery()
-const generateRecommendationsURL = (emojis: string) : string =>  {
+export const generateRecommendationsURL = (emojis: string) : string =>  {
   let seedGenres : string[]= [];
   let seedMetrics : [string, string ,number][] = [];
 
@@ -219,23 +209,3 @@ const generateRecommendationsURL = (emojis: string) : string =>  {
   
   return recommendationsURL + "?" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
 }
-
-
-console.log(generateRecommendationsURL(test))
-
-// console.log(generateRecommendationsURL(test))
-
-// Danceablility		🥳
-// Energy	🪫	🔋
-// Instrumentalness	🎤	🎺
-// Key	-1	11
-// Mode	🦹	🦸
-// Liveness	🧟‍♂️	🤸
-// Speechiness	🎶	🗣️
-// Valence	🥺	🥹
-// Loudness	🦗	💥
-// Tempo	🐌	🚀
-
-
-
-
