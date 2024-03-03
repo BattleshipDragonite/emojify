@@ -1,4 +1,7 @@
 import {randomInteger, randomElement} from './helpers'
+import GraphemeSplitter from 'grapheme-splitter';
+
+const splitter = new GraphemeSplitter()
 
 interface GenreMap {
   [key: string]: { type: string; value: string };
@@ -143,7 +146,7 @@ const metricsMap : MetricsMap = {
 
 const recommendationsURL = "https://api.spotify.com/v1/recommendations"
 
-const createRandomEmojiQuery = () : string => {
+export const createRandomEmojiQuery = () : string => {
   const genresOptions = Object.keys(genresMap);
   const metricsOptions = Object.keys(metricsMap);
 
@@ -160,15 +163,17 @@ export const generateRecommendationsURL = (emojis: string) : string =>  {
   let seedGenres : string[]= [];
   let seedMetrics : [string, string ,number][] = [];
 
-  for (const emoji of emojis) {
+  // TODO Find Solution without external dependency
+  for (const emoji of splitter.splitGraphemes(emojis)) {
     if (genresMap[emoji] !== undefined) {
+      console.log(emoji)
       seedGenres.push(genresMap[emoji].value)
     } 
       // If Not found add it with target of value
-      if (metricsMap[emoji] !== undefined) {
-        const {type,qualifier,value} = metricsMap[emoji]
-        seedMetrics.push([type,qualifier, value])
-      }
+    if (metricsMap[emoji] !== undefined) {
+      const {type,qualifier,value} = metricsMap[emoji]
+      seedMetrics.push([type,qualifier, value])
+    }
     
   }
   
@@ -194,18 +199,17 @@ export const generateRecommendationsURL = (emojis: string) : string =>  {
         metricsObject[type].value += value; 
         metricsObject[type].count += 1;
         metricsObject[type].value /= metricsObject[type].count; 
-      
+
     }
 
     const metricList = Object.keys(metricsObject).map((metric)=>{
       return metricsObject[metric].qualifier + "=" + metricsObject[metric].value
-    }).join("&")
-
-    
-    
+    }).join("&")  
     return "&" + metricList
   }
   
-  
   return recommendationsURL + "?" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
 }
+
+console.log(generateRecommendationsURL("🇳🇬"))
+
