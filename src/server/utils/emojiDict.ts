@@ -1,4 +1,12 @@
-import querystring from 'querystring';
+// import {randomInteger, randomElement} from './helpers'
+
+const randomElement = (array : string[]) => {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+const randomInteger = (min : number, max : number) : number => {
+  return min + Math.floor((Math.random() * (max - min + 1)))
+}
 
 interface GenreMap {
   [key: string]: { type: string; value: string };
@@ -143,25 +151,41 @@ const metricsMap : MetricsMap = {
 
 const recommendationsURL = "https://api.spotify.com/v1/recommendations"
 
-const test = "🪜🚀🚀🪫"
-const parseEmojis = (emojis: string) : string =>  {
-  let seedGenres = [];
-  let seedMetrics = [];
+const createRandomEmojiQuery = () : string => {
+  const genresOptions = Object.keys(genresMap);
+  const metricsOptions = Object.keys(metricsMap);
+
+  const numGenres = randomInteger(1,5);
+  const numMetrics = randomInteger(1,10);
+
+  const genres = Array.from({length: numGenres}, () => randomElement(genresOptions));
+  const metrics = Array.from({length: numMetrics}, () => randomElement(metricsOptions));
+  const query = genres.concat(metrics).join("");
+  return query;
+}
+
+
+const test = createRandomEmojiQuery()
+const generateRecommendationsURL = (emojis: string) : string =>  {
+  let seedGenres : string[]= [];
+  let seedMetrics : [string, string ,number][] = [];
 
   for (const emoji of emojis) {
     if (genresMap[emoji] !== undefined) {
       seedGenres.push(genresMap[emoji].value)
-    } else {
+    } 
       // If Not found add it with target of value
       if (metricsMap[emoji] !== undefined) {
         const {type,qualifier,value} = metricsMap[emoji]
         seedMetrics.push([type,qualifier, value])
       }
-    }
+    
   }
   
-  const  buildGenreQuery = (genres : [string]): string => { 
-    const genreList = genres.join(",")
+  const  buildGenreQuery = (genres : string[]): string => { 
+    // Handle duplicate genre entries
+    const genreSet = new Set(genres);
+    const genreList = Array.from(genreSet).join(",")
     return  "seed_genres=" + encodeURIComponent(genreList)
   }
 
@@ -182,15 +206,24 @@ const parseEmojis = (emojis: string) : string =>  {
         metricsObject[type].value /= metricsObject[type].count; 
       
     }
-    console.log(metricsObject)
-    return 'hello'
+
+    const metricList = Object.keys(metricsObject).map((metric)=>{
+      return metricsObject[metric].qualifier + "=" + metricsObject[metric].value
+    }).join("&")
+
+    
+    
+    return "&" + metricList
   }
   
   
-  return 'hello'
+  return recommendationsURL + "?" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
 }
 
-console.log(parseEmojis(test))
+
+console.log(generateRecommendationsURL(test))
+
+// console.log(generateRecommendationsURL(test))
 
 // Danceablility		🥳
 // Energy	🪫	🔋
