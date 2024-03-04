@@ -4,7 +4,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
-
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const nodeExternals = require('webpack-node-externals');
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = isProduction
@@ -24,10 +25,11 @@ const config = {
     new HtmlWebpackPlugin({
       template: "index.html",
     }),
-
+    new NodePolyfillPlugin(),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
+  target: 'node',
   module: {
     rules: [
       {
@@ -54,7 +56,11 @@ const config = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+    fallback: { crypto: require.resolve("crypto-browserify"), fs: false, async_hooks: false }
   },
+  externals: {
+    "express": "require('express')"
+  }
 };
 
 module.exports = () => {
