@@ -12,3 +12,13 @@ export type Metrics = {
   key?: number
   time_signature?: number
 }
+
+export type ChannelProps = {
+  metric: string
+  min: number
+  max: number
+  defaultValue: number
+  step: number
+  maxEmoji: string
+  minEmoji: string
+}
