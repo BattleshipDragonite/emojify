@@ -2,7 +2,7 @@
 
 **Issue Type**
 
-- [x] Bug
+- [ ] Bug
 - [ ] Feature
 - [ ] Tech Debt
 
