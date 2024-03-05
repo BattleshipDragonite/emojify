@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
 import crypto from 'crypto';
+import { routes } from './routes';
 
 const PORT = 3000;
 // TODO - Move to .env
@@ -14,7 +15,7 @@ const PORT = 3000;
 const app = express();
 app.use(cookieParser())
 app.use(cors())
-
+app.use("/api", routes);
 
 
 // CLIENT CREDENTIALS
@@ -51,7 +52,7 @@ const createCredentialsObject = (): AuthCredentials => {
   const credentialsObject = {
     response_type: "code",
     client_id: clientID,
-    scope: 'user-read-private user-read-email',
+    scope: 'user-read-private user-read-email playlist-modify-public',
     redirect_uri: redirectURI,
     state: randomString
   }
@@ -72,6 +73,7 @@ app.get("/login", (req, res) => {
   res.redirect(authURL)
 })
 
+// Receive Access token from spotify
 app.get('/callback', async (req, res) => {
   const { code, queryState } = req.query;
   const { cookieState } = req.cookies[stateKey]
@@ -95,11 +97,11 @@ app.get('/callback', async (req, res) => {
 
     axios.post(spotifyTokenURL, authOptions, config)
       .then((response) => {
-        console.log('things are working')
+        console.log('access token received')
         console.log(response.data)
-        // do other stuff
+        // res.locals.tokenData = response.data;
+        return res.status(200).json(response.data)
       }).catch((error) => {
-        console.log('things are NOT working')
         console.log({ error })
       })
 
