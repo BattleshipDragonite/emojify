@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 const MetricsMixer = () => {
 
   return (
     <div id="mixer">
+      <div id="acousticness" className="channel">
+        <label htmlFor="acousticness-slider">🥳</label>
+        <input
+          id="acousticness-slider"
+          type="range"
+          min="0"
+          max="1"
+          defaultValue="0"
+          step="0.01"
+          className="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        />
+        <label htmlFor="acousticness-slider">😐</label>
+      </div>
       <div id="danceability" className="channel">
         <label htmlFor="danceability-slider">🥳</label>
         <input
@@ -57,7 +70,7 @@ const MetricsMixer = () => {
         <label htmlFor="mode-slider">🦹‍♀️</label>
       </div>
       <div id="liveness" className="channel">
-        <label htmlFor="liveness-slider">🤸‍♀️</label>
+        <label htmlFor="liveness-slider">🎫</label>
         <input
           id="liveness-slider"
           type="range"
@@ -67,7 +80,7 @@ const MetricsMixer = () => {
           step="0.01"
           className="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
         />
-        <label htmlFor="liveness-slider">🧟‍♂️</label>
+        <label htmlFor="liveness-slider">🎧</label>
       </div>
       <div id="speechiness" className="channel">
         <label htmlFor="speechiness-slider">🗣️</label>
@@ -122,7 +135,6 @@ const MetricsMixer = () => {
         <label htmlFor="tempo-slider">🐌</label>
       </div>
     </div>
-
   )
 }
 
