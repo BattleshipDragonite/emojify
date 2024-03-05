@@ -4,7 +4,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
-
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const nodeExternals = require('webpack-node-externals');
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = isProduction
@@ -12,19 +13,19 @@ const stylesHandler = isProduction
   : "style-loader";
 
 const config = {
-  entry: "./src/server/server.ts",
+  entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     open: true,
-    host: "localhost",
+    host: 'localhost',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: 'index.html',
     }),
-
+    new NodePolyfillPlugin(),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
@@ -32,29 +33,42 @@ const config = {
     rules: [
       {
         test: /\.(ts|tsx)$/i,
-        loader: "ts-loader",
-        exclude: ["/node_modules/"],
+        loader: 'babel-loader',
+        exclude: ['/node_modules/'],
       },
       {
         test: /\.css$/i,
-        use: [stylesHandler, "css-loader"],
+        use: [stylesHandler, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [stylesHandler, "css-loader", "sass-loader"],
+        use: [stylesHandler, 'css-loader', 'sass-loader', 'postcss-loader'],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        type: 'asset',
       },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
+    fallback: { crypto: require.resolve("crypto-browserify"), fs: false, async_hooks: false }
   },
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    static: {
+      directory: path.join(__dirname, 'dist')
+    },
+  }
 };
 
 module.exports = () => {

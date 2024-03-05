@@ -8,6 +8,9 @@
     "allowJs": true,
     "sourceMap": true
   },
+  "files": [
+    "src/**/*"
+  ],
   "include": [
     "src/**/*.ts"
   ],

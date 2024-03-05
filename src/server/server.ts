@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
 import crypto from 'crypto';
+import { routes } from './routes';
 
 const PORT = 3000;
 // TODO - Move to .env
@@ -14,7 +15,7 @@ const PORT = 3000;
 const app = express();
 app.use(cookieParser())
 app.use(cors())
-
+app.use("/api", routes);
 
 
 // CLIENT CREDENTIALS
@@ -29,7 +30,7 @@ const stateKey = "spotify_auth_state";
 
 // TYPES
 type AuthCredentials = {
-  response_type : string,
+  response_type: string,
   client_id: string,
   scope: string,
   redirect_uri: string,
@@ -41,78 +42,71 @@ type AuthOptions = {
 
 
 // Generate Random String
-const generateRandomString = (length:number):string => {
-  return crypto.randomBytes(60).toString('hex').slice(0,length)
+const generateRandomString = (length: number): string => {
+  return crypto.randomBytes(60).toString('hex').slice(0, length)
 }
 
 // TODO - Move to server/controllers/spotifyAuth.ts
-const createCredentialsObject = ():AuthCredentials => {
+const createCredentialsObject = (): AuthCredentials => {
   const randomString = generateRandomString(16)
   const credentialsObject = {
-    response_type : "code",
+    response_type: "code",
     client_id: clientID,
-    scope: 'user-read-private user-read-email',
+    scope: 'user-read-private user-read-email playlist-modify-public',
     redirect_uri: redirectURI,
     state: randomString
   }
-  return credentialsObject; 
+  return credentialsObject;
 }
 
 
 
 // SEND Request to spotify
-app.get("/login",(req,res)=>{
+app.get("/login", (req, res) => {
   const credentialsObject = createCredentialsObject();
   const state = credentialsObject.state;
 
   const credentialsString = querystring.stringify(credentialsObject);
   const authURL = `${spotifyAuthURL + credentialsString}`;
 
-  res.cookie(stateKey, state );
+  res.cookie(stateKey, state);
   res.redirect(authURL)
 })
 
-app.get('/callback',(req,res)=>{
-  const {code, queryState} = req.query;
-  const {cookieState} = req.cookies[stateKey]
-  
+// Receive Access token from spotify
+app.get('/callback', async (req, res) => {
+  const { code, queryState } = req.query;
+  const { cookieState } = req.cookies[stateKey]
+
   if (cookieState !== queryState) {
     //TODO SEND TO ERROR HANDLER    
   } else {
 
     const authOptions = {
-
-      form: {
-        code: code,
-        redirect_uri: redirectURI,
-        grant_type: 'authorization_code',
-      },
-      headers: {
-        "content-type" : 'application/x-www-form-urlencoded',
-        'Authorization' : `Basic ` + (Buffer.from(`${clientID}:${clientSecret}`).toString('base64'))
-      },
-      json : true
+      code: code,
+      redirect_uri: redirectURI,
+      grant_type: 'authorization_code',
     }
 
-    // var authOptions = {
-    //   url: 'https://accounts.spotify.com/api/token',
-    //   form: {
-    //     code: code,
-    //     redirect_uri: redirect_uri,
-    //     grant_type: 'authorization_code'
-    //   },
-    //   headers: {
-    //     'content-type': 'application/x-www-form-urlencoded',
-    //     Authorization: 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-    //   },
-    //   json: true
-    // };
-    axios.post(spotifyTokenURL,authOptions)
-    .then((response)=>{
-      console.log(response.data)
-    }).catch((error)=>{
-      console.log({error})
-    })
+    const config = {
+      headers: {
+        "content-type": 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
+      }
+    };
+
+    axios.post(spotifyTokenURL, authOptions, config)
+      .then((response) => {
+        console.log('access token received')
+        console.log(response.data)
+        // res.locals.tokenData = response.data;
+        return res.status(200).json(response.data)
+      }).catch((error) => {
+        console.log({ error })
+      })
+
+
+
 
     res.clearCookie(stateKey);
 
@@ -122,11 +116,11 @@ app.get('/callback',(req,res)=>{
 })
 
 // ERROR HANDLER
-app.use("*", (req,res)=>{
+app.use("*", (req, res) => {
   console.log('error')
 })
 
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
   console.log(`Server running on PORT:${PORT} 🌴`)
 })
