@@ -1,6 +1,30 @@
 import React, { useState } from "react";
 
 const MetricsMixer = () => {
+  type MainMetrics = {
+    acousticness: number
+    danceability: number
+    energy: number
+    instrumentalness: number
+    liveness: number
+    loudness: number
+    mode: number
+    speechiness: number
+    tempo: number
+    valence: number
+  }
+  const [mainMetrics, setMainMetrics] = useState<MainMetrics>({
+    acousticness: 1,
+    danceability: 1,
+    energy: 1,
+    instrumentalness: 1,
+    liveness: 1,
+    loudness: 1,
+    mode: 1,
+    speechiness: 1,
+    tempo: 1,
+    valence: 1
+  })
 
   return (
     <div id="mixer">
