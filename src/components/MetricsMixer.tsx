@@ -1,19 +1,8 @@
 import React, { useState } from "react";
+import { Metrics } from "../client/types";
 
 const MetricsMixer = () => {
-  type MainMetrics = {
-    acousticness: number
-    danceability: number
-    energy: number
-    instrumentalness: number
-    liveness: number
-    loudness: number
-    mode: number
-    speechiness: number
-    tempo: number
-    valence: number
-  }
-  const [mainMetrics, setMainMetrics] = useState<MainMetrics>({
+  const [metrics, setMetrics] = useState<Metrics>({
     acousticness: 1,
     danceability: 1,
     energy: 1,
@@ -29,7 +18,7 @@ const MetricsMixer = () => {
   return (
     <div id="mixer">
       <div id="acousticness" className="channel">
-        <label htmlFor="acousticness-slider">🥳</label>
+        <label htmlFor="acousticness-slider">🏞️</label>
         <input
           id="acousticness-slider"
           type="range"
@@ -39,7 +28,7 @@ const MetricsMixer = () => {
           step="0.01"
           className="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
         />
-        <label htmlFor="acousticness-slider">😐</label>
+        <label htmlFor="acousticness-slider">🏙️</label>
       </div>
       <div id="danceability" className="channel">
         <label htmlFor="danceability-slider">🥳</label>
