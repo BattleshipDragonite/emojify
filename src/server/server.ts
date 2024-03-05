@@ -1,10 +1,12 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import querystring from 'querystring';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
 import crypto from 'crypto';
+import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
 import { routes } from './routes';
 
 const PORT = 3000;
@@ -94,25 +96,35 @@ app.get('/callback', async (req, res) => {
         'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
       }
     };
-
+    res.clearCookie(stateKey);
     axios.post(spotifyTokenURL, authOptions, config)
       .then((response) => {
-        console.log('access token received')
-        console.log(response.data)
-        // res.locals.tokenData = response.data;
+        // console.log(response.data)
+
+        fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+          if (err) { console.log(err) }
+        })
         return res.status(200).json(response.data)
       }).catch((error) => {
         console.log({ error })
       })
 
 
-
-
-    res.clearCookie(stateKey);
-
   }
 
-  res.send('OK')
+
+})
+
+app.get('/recommendations', (req, res) => {
+  const randomEmoji = createRandomEmojiQuery();
+  const recommendationURL = generateRecommendationsURL(randomEmoji);
+
+  // TODO USE HEADER with endpoint
+  console.log(recommendationURL);
+
+  // axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' +  } })
+  // fs.readFile(path.join(__dirname, '../../token.json'), 'UTF-8')
+  return res.status(200).send(randomEmoji);
 })
 
 // ERROR HANDLER
