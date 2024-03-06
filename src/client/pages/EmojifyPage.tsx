@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { Button } from 'flowbite-react'
+
+import MetricsMixer from '../../components/MetricsMixer'
 import {genresMap} from '../../server/utils/emojiDict.ts'
 
 const EmojifyPage = () => {
@@ -9,8 +11,7 @@ const EmojifyPage = () => {
 
 
 return (
-    <div className='flex flex-col align-middle'>
-    <h1>Emojify Page</h1>
+    <div id='user-interface'>
     <div className='genre-div'>
         <h1 className='text-8xl m-20'>{genre}</h1>
     </div>
@@ -50,6 +51,7 @@ return (
         </div>
 
     </div>
+    <MetricsMixer />
     </div>
     )
 }
