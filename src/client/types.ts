@@ -4,12 +4,12 @@ export type Metrics = {
   energy: number
   instrumentalness: number
   liveness: number
-  loudness: number
-  mode: number
   speechiness: number
-  tempo: number
   valence: number
+  loudness: number
+  tempo: number
   key?: number
+  mode?: number
   time_signature?: number
 }
 
