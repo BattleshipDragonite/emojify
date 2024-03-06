@@ -1,5 +1,5 @@
 import React from "react";
-import { ChannelProps } from "../client/types";
+import { MetricChannelProps } from "../client/types";
 
 const MetricChannel = ({
   metric,
@@ -9,7 +9,7 @@ const MetricChannel = ({
   step,
   minEmoji,
   maxEmoji
-}: ChannelProps) => {
+}: MetricChannelProps) => {
 
   return (
     <div id={metric} className="metric-channel">

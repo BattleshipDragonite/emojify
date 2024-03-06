@@ -13,7 +13,7 @@ export type Metrics = {
   time_signature?: number
 }
 
-export type ChannelProps = {
+export type MetricChannelProps = {
   metric: string
   min: number
   max: number
