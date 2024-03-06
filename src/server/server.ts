@@ -140,8 +140,7 @@ app.get('/recommendations', async (req, res) => {
   const randomEmoji = createRandomEmojiQuery();
   const recommendationURL = generateRecommendationsURL(randomEmoji);
 
-  // TODO USE HEADER with endpoint
-  console.log(recommendationURL);
+  // console.log(recommendationURL);
 
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
   const accessToken = data.access_token;
@@ -150,6 +149,9 @@ app.get('/recommendations', async (req, res) => {
       fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
         if (err) { console.log(err) }
       })
+      const tracks = response.data.tracks;
+      const sorted = tracks.sort((a: any, b: any) => b.popularity - a.popularity).filter((a: any) => a.preview_url)
+      //const result = words.filter((word) => word.length > 6);
       return res.status(200).json(response.data)
     }).catch((error) => {
       console.log({ error })

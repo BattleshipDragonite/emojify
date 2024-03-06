@@ -207,7 +207,7 @@ export const generateRecommendationsURL = (emojis: string): string => {
     return "&" + metricList
   }
 
-  return recommendationsURL + "?" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
+  return recommendationsURL + "?limit=50&" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
 }
 
 
