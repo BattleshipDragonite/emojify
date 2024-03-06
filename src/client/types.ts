@@ -22,3 +22,10 @@ export type MetricChannelProps = {
   maxEmoji: string
   minEmoji: string
 }
+
+export type AuxChannelProps = {
+  metric: string
+  min: number
+  max: number
+  defaultValue: number
+}

@@ -1,11 +1,12 @@
 import React from "react";
+import { AuxChannelProps } from "../client/types";
 
 const AuxChannel = ({
   metric,
   min,
   max,
   defaultValue,
-}) => {
+}: AuxChannelProps) => {
 
   return (
     <div id={metric} className="aux-channel">
