@@ -157,7 +157,9 @@ app.get('/recommendations', async (req, res) => {
   // return res.status(200).send(randomEmoji);
 })
 
-
+app.get('/addToPlaylist',(req,res)=>{
+  const addToPlaylistURL = "https://api.spotify.com/v1/playlists/"
+})
 
 
 
