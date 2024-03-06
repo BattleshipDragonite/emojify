@@ -12,7 +12,7 @@ const MetricChannel = ({
 }: ChannelProps) => {
 
   return (
-    <div id={metric} className="channel">
+    <div id={metric} className="metric-channel">
       <label htmlFor={metric + "-slider"}>{maxEmoji}</label>
       <input
         id={metric + "-slider"}

@@ -64,13 +64,13 @@ body {
   justify-content: space-between;
 }
 
-.channel {
+.metric-channel {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.channel > label {
+.metric-channel > label {
   font-size: 2em;
 }
 
