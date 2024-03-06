@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import dotenv from 'dotenv';
 
 dotenv.config();
-console.log(process.env)
+// console.log(process.env)
 
 type AuthCredentials = {
     response_type: string,
