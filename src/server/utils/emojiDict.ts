@@ -20,7 +20,7 @@ interface MetricsObject {
   [key: string]: Metric;
 }
 
-const genresMap : GenreMap = {
+export const genresMap : GenreMap = {
   "🪵": { type: "genre", value: "acoustic" },
   "🇳🇬": { type: "genre", value: "afrobeat" },
   "🗿": { type: "genre", value: "alt-rock" },
