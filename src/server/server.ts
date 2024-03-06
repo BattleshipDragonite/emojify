@@ -167,7 +167,9 @@ app.get('/recommendations', async (req, res) => {
     })
 })
 
-
+app.get('/addToPlaylist',(req,res)=>{
+  const addToPlaylistURL = "https://api.spotify.com/v1/playlists/"
+})
 
 
 

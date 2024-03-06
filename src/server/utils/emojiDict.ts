@@ -4,7 +4,7 @@ import GraphemeSplitter from 'grapheme-splitter';
 const splitter = new GraphemeSplitter()
 
 interface GenreMap {
-  [key: string]: { type: string; value: string };
+  [key: string]: { type: string; value: string | string[]};
 }
 interface MetricsMap {
   [key: string]: { type: string; qualifier: string, value: number };
@@ -30,8 +30,7 @@ const genresMap: GenreMap = {
   "🦇": { type: "genre", value: "black-metal" },
   "🪕": { type: "genre", value: "bluegrass" },
   "😩": { type: "genre", value: "blues" },
-  "🇧🇷": { type: "genre", value: "bossanova" }, // Note: This emoji is repeated for multiple genres
-  // "🇧🇷": { type: "genre", value: "brazil" }, // Omitted due to duplicate emoji
+  "🇧🇷": { type: "genre", value: ["bossanova", "brazil", "forro", "mpb", "pagode"] }, // Note: This emoji is repeated for multiple genres
   "🥁": { type: "genre", value: "breakbeat" },
   "🇬🇧": { type: "genre", value: "british" },
   "🇭🇰": { type: "genre", value: "cantopop" },
@@ -57,8 +56,89 @@ const genresMap: GenreMap = {
   "🔌": { type: "genre", value: "electronic" },
   "😒": { type: "genre", value: "emo" },
   // "🪕": { type: "genre", value: "folk" }, // Note: This emoji is repeated for multiple genres
-  // "🇧🇷": { type: "genre", value: "forro" }, // Note: This emoji is repeated for multiple genres, included for illustration
   // Additional genres would follow the same pattern...
+  //
+  "🇫🇷": { type: "genre", value: "french" },
+  // "🦆": { type: "genre", value: "funk" },
+
+  "🚘": {type: "genre", value: "garage"},
+  "🇩🇪": {type: "genre", value: "german"},
+  "⛪️": {type: "genre", value: "gospel"},
+  "🧛🏻‍♀️": {type: "genre", value: "goth"},
+  "⚙️" : {type: "genre", value: "grindcore"},
+  "😌": {type: "genre", value: "groove"},
+  "🙄": {type: "genre", value: "grunge"},
+  "🎸": {type: "genre", value: "guitar"},
+  "😁": {type: "genre", value: "happy"},
+  "💎": {type: "genre", value: "hard-rock"},
+  "👊" : {type: "genre", value: "hardcore"},
+  "🏎️": {type: "genre", value: "hardstyle"},
+  "⚓️": {type: "genre", value: "heavy-metal"},
+  "💸": {type: "genre", value: "hip-hop"},
+  "🎄": {type: "genre", value: "holidays"},
+  "🤠": {type: "genre", value: "honky-tonk"},
+  "🏠": {type: "genre", value: "house"},
+  "🧠": {type: "genre", value: "idm"},
+  "🇮🇳": {type: "genre", value: "indian"},
+  "🚶‍♂️": {type: "genre", value: "indie"},
+  "🕴️": {type: "genre", value: "indie-pop"},
+  "🏭": {type: "genre", value: "industrial"},
+  "🇮🇷": {type: "genre", value: "iranian"},
+  "🇯🇵": {type: "genre", value: ["j-dance", "j-idol", "j-pop","j-rock"]},
+  "🎷": { type: "genre", value: "jazz"},
+  "🇰🇷": { type: "genre", value: "k-pop"},
+  // "👶": { type: "genre", value: "kids"},
+  "💃": { type: "genre", value: ["latin]", "latino"]},
+  "🇲🇾": { type: "genre", value: "malay"},
+  "🇨🇳": { type: "genre", value: "mandopop"},
+  "🤘": { type: "genre", value: "metal"},
+  // "🤘": { type: "genre", value: "metal-misc"},
+  "🌋": { type: "genre", value: "metalcore"},
+  "👾": { type: "genre", value: "minimal-techno"},
+  "🎞️": { type: "genre", value: "movies"},
+  "🐣": { type: "genre", value: "new-age"},
+  "⭐️": { type: "genre", value: "new-release"},
+  "🎭": { type: "genre", value: "opera"},
+  "🎉": { type: "genre", value: "party"},
+  "🇵🇭": { type: "genre", value: "philippines-opm"},
+  "🎹": { type: "genre", value: "piano"},
+  "🍾": { type: "genre", value: "pop"},
+  // "🎞️": { type: "genre", value: "pop-film"},
+  // "🪜": { type: "genre", value: "post-dubstep"},
+  "🪲": { type: "genre", value: "power-pop"},
+  "🏘️": { type: "genre", value: "progressive-house"},
+  "😵‍💫": { type: "genre", value: "psych-rock"},
+  "🧨": { type: "genre", value: "punk"},
+  "💣": { type: "genre", value: "punk-rock"},
+  "😮‍💨": { type: "genre", value: "r-n-b"},
+  "🌧️": { type: "genre", value: "rainy-day"},
+  // "🇯🇲": { type: "genre", value: "reggae" },
+  "🚗": { type: "genre", value: "road-trip" },
+  "🪨": { type: "genre", value: "rock" },
+  "🧻": { type: "genre", value: "rock-n-roll" },
+  "🐐": { type: "genre", value: "rockabilly" },
+  "🌹": { type: "genre", value: "romance" },
+  "😔": { type: "genre", value: "sad" },
+  "🇨🇺": { type: "genre", value: "salsa" },
+  // "🇧🇷": { type: "genre", value: "sertanejo" },
+  // "🎭": { type: "genre", value: "show-tunes" },
+  "🎤": { type: "genre", value: "singer-songwriter" },
+  // "🇯🇲": { type: "genre", value: "ska" },
+  "💤": { type: "genre", value: "sleep" },
+  "👻": { type: "genre", value: "soul" },
+  "💿": { type: "genre", value: "soundtracks" },
+  "🇪🇸": { type: "genre", value: "spanish" },
+  "📚": { type: "genre", value: "study" },
+  "🌞": { type: "genre", value: "summer" },
+  "🇸🇪": { type: "genre", value: "swedish" },
+  "🌊": { type: "genre", value: "synth-pop" },
+  "🇦🇷": { type: "genre", value: "tango" },
+  "🤖": { type: "genre", value: "techno" },
+  "🫨": { type: "genre", value: "trance" },
+  "😎": { type: "genre", value: "trip-hop" },
+  "🇹🇷": { type: "genre", value: "turkish" },
+  "🏋️": { type: "genre", value: "work-out" },
+  "🌎": { type: "genre", value: "world-music" },
 };
 
 const metricsMap: MetricsMap = {
@@ -166,7 +246,12 @@ export const generateRecommendationsURL = (emojis: string): string => {
   // TODO Find Solution without external dependency
   for (const emoji of splitter.splitGraphemes(emojis)) {
     if (genresMap[emoji] !== undefined) {
-      seedGenres.push(genresMap[emoji].value)
+      if (Array.isArray(genresMap[emoji].value)) {
+        seedGenres.push(...genresMap[emoji].value)
+      } else {
+        seedGenres.push(...genresMap[emoji].value) 
+      }
+      
     }
     // If Not found add it with target of value
     if (metricsMap[emoji] !== undefined) {
