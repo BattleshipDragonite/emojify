@@ -83,13 +83,11 @@ app.get('/callback', async (req, res) => {
   if (cookieState !== queryState) {
     //TODO SEND TO ERROR HANDLER    
   } else {
-
     const authOptions = {
       code: code,
       redirect_uri: redirectURI,
       grant_type: 'authorization_code',
     }
-
     const config = {
       headers: {
         "content-type": 'application/x-www-form-urlencoded',
@@ -108,24 +106,60 @@ app.get('/callback', async (req, res) => {
       }).catch((error) => {
         console.log({ error })
       })
-
-
   }
-
-
 })
 
-app.get('/recommendations', (req, res) => {
+app.get('/refresh_token', async (req, res) => {
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const refresh_token = data.refresh_token;
+  // console.log(refresh_token) //looks good
+  const authOptions = {
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token
+    }
+  };
+  const config = {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
+    },
+  }
+  axios.post(spotifyTokenURL, authOptions, config)
+    .then((response) => {
+      fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+        if (err) { console.log(err) }
+      })
+      return res.status(200).json(response.data)
+    }).catch((error) => {
+      console.log({ error })
+    })
+})
+
+app.get('/recommendations', async (req, res) => {
   const randomEmoji = createRandomEmojiQuery();
   const recommendationURL = generateRecommendationsURL(randomEmoji);
 
   // TODO USE HEADER with endpoint
   console.log(recommendationURL);
 
-  // axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' +  } })
-  // fs.readFile(path.join(__dirname, '../../token.json'), 'UTF-8')
-  return res.status(200).send(randomEmoji);
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const accessToken = data.access_token;
+  axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
+    .then((response) => {
+      fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
+        if (err) { console.log(err) }
+      })
+      return res.status(200).json(response.data)
+    }).catch((error) => {
+      console.log({ error })
+    })
+  // return res.status(200).send(randomEmoji);
 })
+
+
+
+
 
 // ERROR HANDLER
 app.use("*", (req, res) => {
