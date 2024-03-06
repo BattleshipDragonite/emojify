@@ -1,4 +1,4 @@
-import {randomInteger, randomElement} from './helpers'
+import { randomInteger, randomElement } from './helpers'
 import GraphemeSplitter from 'grapheme-splitter';
 
 const splitter = new GraphemeSplitter()
@@ -20,7 +20,7 @@ interface MetricsObject {
   [key: string]: Metric;
 }
 
-const genresMap : GenreMap = {
+const genresMap: GenreMap = {
   "🪵": { type: "genre", value: "acoustic" },
   "🇳🇬": { type: "genre", value: "afrobeat" },
   "🗿": { type: "genre", value: "alt-rock" },
@@ -61,83 +61,83 @@ const genresMap : GenreMap = {
   // Additional genres would follow the same pattern...
 };
 
-const metricsMap : MetricsMap = {
-  "😐" : {
+const metricsMap: MetricsMap = {
+  "😐": {
     type: "danceability",
-    qualifier : "target_danceability",
-    value: 0, 
+    qualifier: "target_danceability",
+    value: 0,
   },
-  "🥳" : {
+  "🥳": {
     type: "danceability",
-    qualifier : "target_danceability",
-    value: 1, 
+    qualifier: "target_danceability",
+    value: 1,
   },
-  "🎤" : {
+  "🎤": {
     type: "instrumentalness",
-    qualifier : "target_instrumentalness",
-    value: 0, 
+    qualifier: "target_instrumentalness",
+    value: 0,
   },
-  "🎺" : {
+  "🎺": {
     type: "instrumentalness",
-    qualifier : "target_instrumentalness",
-    value: 1, 
+    qualifier: "target_instrumentalness",
+    value: 1,
   },
-  "🪫" : {
+  "🪫": {
     type: "energy",
-    qualifier : "target_energy",
-    value: 0, 
+    qualifier: "target_energy",
+    value: 0,
   },
-  "🔋" : {
+  "🔋": {
     type: "energy",
-    qualifier : "target_energy",
-    value: 1, 
+    qualifier: "target_energy",
+    value: 1,
   },
-  "🦹" : {
+  "🦹": {
     type: "mode",
     qualifier: "target_mode",
     value: 0
   },
-  "🦸" : {
+  "🦸": {
     type: "mode",
     qualifier: "target_mode",
     value: 1
   },
-  "🧟‍♂️" : {
+  "🧟‍♂️": {
     type: "liveness",
     qualifier: "target_liveness",
     value: 0
   },
-  "🤸" : {
+  "🤸": {
     type: "liveness",
     qualifier: "target_liveness",
     value: 1
   },
-  "🥺" : {
+  "🥺": {
     type: "valence",
     qualifier: "target_valence",
     value: 0
   },
-  "🥹" : {
+  "🥹": {
     type: "valence",
     qualifier: "target_valence",
     value: 1
   },
-  "🦗" : {
+  "🦗": {
     type: "loudness",
     qualifier: "target_loudness",
     value: -60
   },
-  "💥" : {
+  "💥": {
     type: "loudness",
     qualifier: "target_loudness",
     value: 0
   },
-  "🐌" : {
+  "🐌": {
     type: "tempo",
     qualifier: "target_tempo",
     value: 0
   },
-  "🚀" : {
+  "🚀": {
     type: "tempo",
     qualifier: "target_tempo",
     value: 240
@@ -146,70 +146,68 @@ const metricsMap : MetricsMap = {
 
 const recommendationsURL = "https://api.spotify.com/v1/recommendations"
 
-export const createRandomEmojiQuery = () : string => {
+export const createRandomEmojiQuery = (): string => {
   const genresOptions = Object.keys(genresMap);
   const metricsOptions = Object.keys(metricsMap);
 
-  const numGenres = randomInteger(1,5);
-  const numMetrics = randomInteger(1,10);
+  const numGenres = randomInteger(1, 5);
+  const numMetrics = randomInteger(1, 10);
 
-  const genres = Array.from({length: numGenres}, () => randomElement(genresOptions));
-  const metrics = Array.from({length: numMetrics}, () => randomElement(metricsOptions));
+  const genres = Array.from({ length: numGenres }, () => randomElement(genresOptions));
+  const metrics = Array.from({ length: numMetrics }, () => randomElement(metricsOptions));
   const query = genres.concat(metrics).join("");
   return query;
 }
 
-export const generateRecommendationsURL = (emojis: string) : string =>  {
-  let seedGenres : string[]= [];
-  let seedMetrics : [string, string ,number][] = [];
+export const generateRecommendationsURL = (emojis: string): string => {
+  let seedGenres: string[] = [];
+  let seedMetrics: [string, string, number][] = [];
 
   // TODO Find Solution without external dependency
   for (const emoji of splitter.splitGraphemes(emojis)) {
     if (genresMap[emoji] !== undefined) {
-      console.log(emoji)
       seedGenres.push(genresMap[emoji].value)
-    } 
-      // If Not found add it with target of value
-    if (metricsMap[emoji] !== undefined) {
-      const {type,qualifier,value} = metricsMap[emoji]
-      seedMetrics.push([type,qualifier, value])
     }
-    
+    // If Not found add it with target of value
+    if (metricsMap[emoji] !== undefined) {
+      const { type, qualifier, value } = metricsMap[emoji]
+      seedMetrics.push([type, qualifier, value])
+    }
+
   }
-  
-  const  buildGenreQuery = (genres : string[]): string => { 
+
+  const buildGenreQuery = (genres: string[]): string => {
     // Handle duplicate genre entries
     const genreSet = new Set(genres);
     const genreList = Array.from(genreSet).join(",")
-    return  "seed_genres=" + encodeURIComponent(genreList)
+    return "seed_genres=" + encodeURIComponent(genreList)
   }
 
-  const buildMetricsQuery = (metrics :[string,string,number][]) : string => {
+  const buildMetricsQuery = (metrics: [string, string, number][]): string => {
     // Build Metrics handling for duplicates and averages
-    const metricsObject : MetricsObject = {}
+    const metricsObject: MetricsObject = {}
     for (const [type, qualifier, value] of metrics) {
       if (metricsObject[type] === undefined) {
         metricsObject[type] = {
           value: 0,
           count: 0,
-          qualifier : qualifier
+          qualifier: qualifier
         }
       }
-        metricsObject[type].value *= metricsObject[type].count;
-        metricsObject[type].value += value; 
-        metricsObject[type].count += 1;
-        metricsObject[type].value /= metricsObject[type].count; 
+      metricsObject[type].value *= metricsObject[type].count;
+      metricsObject[type].value += value;
+      metricsObject[type].count += 1;
+      metricsObject[type].value /= metricsObject[type].count;
 
     }
 
-    const metricList = Object.keys(metricsObject).map((metric)=>{
+    const metricList = Object.keys(metricsObject).map((metric) => {
       return metricsObject[metric].qualifier + "=" + metricsObject[metric].value
-    }).join("&")  
+    }).join("&")
     return "&" + metricList
   }
-  
-  return recommendationsURL + "?" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
+
+  return recommendationsURL + "?limit=50&" + buildGenreQuery(seedGenres) + buildMetricsQuery(seedMetrics)
 }
 
-console.log(generateRecommendationsURL("🇳🇬"))
 

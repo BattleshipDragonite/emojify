@@ -1,10 +1,12 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import querystring from 'querystring';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
 import crypto from 'crypto';
+import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
 import { routes } from './routes';
 
 const PORT = 3000;
@@ -81,39 +83,93 @@ app.get('/callback', async (req, res) => {
   if (cookieState !== queryState) {
     //TODO SEND TO ERROR HANDLER    
   } else {
-
     const authOptions = {
       code: code,
       redirect_uri: redirectURI,
       grant_type: 'authorization_code',
     }
-
     const config = {
       headers: {
         "content-type": 'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
       }
     };
-
+    res.clearCookie(stateKey);
     axios.post(spotifyTokenURL, authOptions, config)
       .then((response) => {
-        console.log('access token received')
-        console.log(response.data)
-        // res.locals.tokenData = response.data;
+
+        fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+          if (err) { console.log(err) }
+        })
         return res.status(200).json(response.data)
       }).catch((error) => {
         console.log({ error })
       })
-
-
-
-
-    res.clearCookie(stateKey);
-
   }
-
-  res.send('OK')
 })
+
+// refresh Spotify token
+app.get('/refresh_token', async (req, res) => {
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const refresh_token = data.refresh_token;
+  // console.log(refresh_token) //looks good
+  const authOptions = {
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token
+    }
+  };
+  const config = {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
+    },
+  }
+  axios.post(spotifyTokenURL, authOptions, config)
+    .then((response) => {
+      fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+        if (err) { console.log(err) }
+      })
+      return res.status(200).json(response.data)
+    }).catch((error) => {
+      console.log({ error })
+    })
+})
+
+// fetches recommendations from Spotify and returns top 3 
+app.get('/recommendations', async (req, res) => {
+  const randomEmoji = createRandomEmojiQuery();
+  const recommendationURL = generateRecommendationsURL(randomEmoji);
+
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const accessToken = data.access_token;
+  axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
+    .then((response) => {
+      fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
+        if (err) { console.log(err) }
+      })
+      const tracks = response.data.tracks;
+      const sorted = tracks.sort((a: any, b: any) => b.popularity - a.popularity).filter((a: any) => a.preview_url)
+      const recommendedTracks = []
+      for (let i = 0; i < 3; i++) {
+        recommendedTracks.push({
+          albumArt: sorted[i].album.images[1].url,
+          albumName: sorted[i].album.name,
+          artistName: sorted[i].artists[0].name,
+          trackName: sorted[i].name,
+          trackID: sorted[i].id,
+          previewURL: sorted[i].preview_url
+        });
+      }
+      return res.status(200).json(recommendedTracks)
+    }).catch((error) => {
+      console.log({ error })
+    })
+})
+
+
+
+
 
 // ERROR HANDLER
 app.use("*", (req, res) => {
