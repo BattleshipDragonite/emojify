@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import MetricChannel from "./MetricChannel";
+import AuxChannel from "./AuxChannel";
 import { Metrics } from "../client/types";
 
 const MetricsMixer = () => {
@@ -99,6 +100,26 @@ const MetricsMixer = () => {
           step={1}
           maxEmoji="🚀"
           minEmoji="🐌"
+        />
+      </div>
+      <div id="auxiliary">
+        <AuxChannel 
+          metric="key"
+          min={-1}
+          max={11}
+          defaultValue={0}
+        />
+        <AuxChannel 
+          metric="mode"
+          min={0}
+          max={1}
+          defaultValue={1}
+        />
+        <AuxChannel 
+          metric="time_signature"
+          min={3}
+          max={7}
+          defaultValue={4}
         />
       </div>
     </>
