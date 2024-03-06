@@ -17,7 +17,7 @@ return (
     </div>
     <div className="keyboard">
         <div className="flex">
-        {genres.slice(0, 13).map((ele) => {
+        {genres.slice(0, 20).map((ele) => {
             return (
                 <>
                 <div className='keys' onClick={() => setGenre(ele)}>
@@ -28,7 +28,7 @@ return (
         })}
         </div>
         <div className="flex">
-        {genres.slice(13, 22).map((ele) => {
+        {genres.slice(20, 36).map((ele) => {
             return (
                 <>
                 <div className='keys' onClick={() => setGenre(ele)}>
@@ -39,7 +39,43 @@ return (
         })}
         </div>
         <div className="flex">
-        {genres.slice(22).map((ele) => {
+        {genres.slice(36, 55).map((ele) => {
+            return (
+                <>
+                <div className='keys' onClick={() => setGenre(ele)}>
+                    <h1>{ele}</h1>
+                </div>
+                </>
+            )
+        })}
+        </div>
+
+        <div className="flex">
+        {genres.slice(55, 75).map((ele) => {
+            return (
+                <>
+                <div className='keys' onClick={() => setGenre(ele)}>
+                    <h1>{ele}</h1>
+                </div>
+                </>
+            )
+        })}
+        </div>
+
+        <div className="flex">
+        {genres.slice(75, 90).map((ele) => {
+            return (
+                <>
+                <div className='keys' onClick={() => setGenre(ele)}>
+                    <h1>{ele}</h1>
+                </div>
+                </>
+            )
+        })}
+        </div>
+
+        <div className="flex">
+        {genres.slice(90).map((ele) => {
             return (
                 <>
                 <div className='keys' onClick={() => setGenre(ele)}>
