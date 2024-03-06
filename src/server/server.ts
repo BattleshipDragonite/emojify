@@ -97,7 +97,6 @@ app.get('/callback', async (req, res) => {
     res.clearCookie(stateKey);
     axios.post(spotifyTokenURL, authOptions, config)
       .then((response) => {
-        // console.log(response.data)
 
         fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
           if (err) { console.log(err) }
@@ -109,6 +108,7 @@ app.get('/callback', async (req, res) => {
   }
 })
 
+// refresh Spotify token
 app.get('/refresh_token', async (req, res) => {
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
   const refresh_token = data.refresh_token;
@@ -136,11 +136,10 @@ app.get('/refresh_token', async (req, res) => {
     })
 })
 
+// fetches recommendations from Spotify and returns top 3 
 app.get('/recommendations', async (req, res) => {
   const randomEmoji = createRandomEmojiQuery();
   const recommendationURL = generateRecommendationsURL(randomEmoji);
-
-  // console.log(recommendationURL);
 
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
   const accessToken = data.access_token;
@@ -151,12 +150,21 @@ app.get('/recommendations', async (req, res) => {
       })
       const tracks = response.data.tracks;
       const sorted = tracks.sort((a: any, b: any) => b.popularity - a.popularity).filter((a: any) => a.preview_url)
-      //const result = words.filter((word) => word.length > 6);
-      return res.status(200).json(response.data)
+      const recommendedTracks = []
+      for (let i = 0; i < 3; i++) {
+        recommendedTracks.push({
+          albumArt: sorted[i].album.images[1].url,
+          albumName: sorted[i].album.name,
+          artistName: sorted[i].artists[0].name,
+          trackName: sorted[i].name,
+          trackID: sorted[i].id,
+          previewURL: sorted[i].preview_url
+        });
+      }
+      return res.status(200).json(recommendedTracks)
     }).catch((error) => {
       console.log({ error })
     })
-  // return res.status(200).send(randomEmoji);
 })
 
 
