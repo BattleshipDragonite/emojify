@@ -72,6 +72,7 @@ body {
 
 .metric-channel > label {
   font-size: 2em;
+  padding: 0.25em;
 }
 
 #mixer .slider {
