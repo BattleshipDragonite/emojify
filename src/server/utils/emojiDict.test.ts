@@ -30,4 +30,14 @@ describe("generateRecommendationsURL", () => {
     expect(url).toContain('target_danceability=0.5'); // Example check, adjust based on actual logic
     expect(url).toContain('target_instrumentalness=0');
   });
+
+  it('should generate a correct URL with no more than 5 genres', () => {
+
+    const emojis = "🇧🇷🇯🇵" // Assuming this generates a fixed sequence now due to mocks
+    
+    const url = generateRecommendationsURL(emojis);
+    const genresString =["bossanova", "brazil", "forro", "mpb", "pagode"].join("%2C")
+    
+    expect(url).toContain(`seed_genres=${genresString}`);    
+  });
 })
