@@ -82,3 +82,11 @@ body {
   height: 175px;
   padding: 0 5px;
 }
+
+#auxiliary {
+  background-color: #c5c5c5;
+  width: 75%;
+  border-radius: 0.5em;
+  margin: 1em;
+  padding: 1em;
+}
