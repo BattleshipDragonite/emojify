@@ -1,4 +1,7 @@
 import { Express, Request, Response, NextFunction } from 'express';
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 import querystring from 'querystring';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
@@ -41,4 +44,41 @@ export const createAuthURL = (req: Request, res: Response, next: NextFunction): 
     res.locals.authURL = authURL;
     res.cookie(process.env.stateKey, state);
     return next()
+}
+
+// gets access and refresh token as part of OAuth process
+export const getToken = (req: Request, res: Response, next: NextFunction): void => {
+
+
+
+
+}
+
+
+export const getNewToken = (req: Request, res: Response, next: NextFunction): void => {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
+    const refresh_token = data.refresh_token;
+    const form = {
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token
+    };
+    const config = {
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + (new (Buffer.from as any)(process.env.clientID + ':' + process.env.clientSecret).toString('base64'))
+        },
+    }
+    axios.post(process.env.spotifyTokenURL, form, config)
+        .then((response) => {
+            const newToken = response.data;
+            newToken.refresh_token = refresh_token;
+            fs.writeFile(path.join(__dirname, '../../../token.json'), JSON.stringify(newToken), err => {
+                if (err) { console.log(err) }
+            })
+            res.locals.newToken = newToken;
+            next()
+        }).catch((error) => {
+            console.log({ error })
+        })
+
 }

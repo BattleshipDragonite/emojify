@@ -6,7 +6,8 @@ import axios from 'axios';
 import cors from 'cors';
 import querystring from 'querystring';
 import { createPlaylistURL, createPlaylist, addTracks } from './controllers/playlist';
-import { createCredentialsObject, createAuthURL } from './controllers/spotifyAuth';
+import { generateRecommendations } from './controllers/recommendations'
+import { createCredentialsObject, createAuthURL, getToken, getNewToken } from './controllers/spotifyAuth';
 import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
 import { routes } from './routes';
 
@@ -45,7 +46,6 @@ app.get("/login", createCredentialsObject, createAuthURL, (req, res) => {
 app.get('/callback', async (req, res) => {
   const { code, queryState } = req.query;
   const { cookieState } = req.cookies[stateKey]
-
   if (cookieState !== queryState) {
     //TODO SEND TO ERROR HANDLER
     res.redirect('/#' + querystring.stringify({
@@ -66,7 +66,6 @@ app.get('/callback', async (req, res) => {
     res.clearCookie(stateKey);
     axios.post(spotifyTokenURL, authOptions, config)
       .then((response) => {
-
         fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
           if (err) { console.log(err) }
         })
@@ -78,70 +77,19 @@ app.get('/callback', async (req, res) => {
 })
 
 // refresh Spotify token
-app.get('/refresh_token', async (req, res) => {
-  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-  const refresh_token = data.refresh_token;
-  // console.log(refresh_token) //looks good
-  const authOptions = {
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    }
-  };
-  const config = {
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + (new (Buffer.from as any)(clientID + ':' + clientSecret).toString('base64'))
-    },
-  }
-  axios.post(spotifyTokenURL, authOptions, config)
-    .then((response) => {
-      fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
-        if (err) { console.log(err) }
-      })
-      return res.status(200).json(response.data)
-    }).catch((error) => {
-      console.log({ error })
-    })
+app.get('/refreshToken', getNewToken, async (req, res) => {
+  return res.status(200).json(res.locals.newToken)
 })
 
-// fetches recommendations from Spotify and returns top 3 
-app.get('/recommendations', async (req, res) => {
-  const randomEmoji = createRandomEmojiQuery();
-  const recommendationURL = generateRecommendationsURL(randomEmoji);
-
-  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-  const accessToken = tokenData.access_token;
-  console.log(recommendationURL)
-  axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
-    .then((response) => {
-      fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
-        if (err) { console.log(err) }
-      })
-      const tracks = response.data.tracks;
-      const sorted = tracks.sort((a: any, b: any) => b.popularity - a.popularity).filter((a: any) => a.preview_url)
-      const recommendedTracks = []
-      for (let i = 0; i < 3; i++) {
-        recommendedTracks.push({
-          albumArt: sorted[i].album.images[1].url,
-          albumName: sorted[i].album.name,
-          artistName: sorted[i].artists[0].name,
-          trackName: sorted[i].name,
-          trackID: sorted[i].id,
-          trackURI: sorted[i].uri,
-          previewURL: sorted[i].preview_url
-        });
-      }
-      return res.status(200).json(recommendedTracks)
-    }).catch((error) => {
-      console.log({ error })
-    })
+// get recommended tracks
+app.get('/recommendations', generateRecommendations, async (req, res) => {
+  return res.status(200).json(res.locals.recommendedTracks)
 })
 
+// create and save completed playlist to Spotify
 app.get('/generatePlaylist', createPlaylistURL, createPlaylist, addTracks, async (req, res) => {
   return res.status(200).json(res.locals.final)
 })
-
 
 // ERROR HANDLER
 app.use("*", (req, res) => {
