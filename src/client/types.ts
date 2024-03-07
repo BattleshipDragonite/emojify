@@ -21,6 +21,8 @@ export type MetricChannelProps = {
   step: number
   maxEmoji: string
   minEmoji: string
+  currMetrics: Metrics
+  setMetrics: React.SetStateAction<Metrics>
 }
 
 export type AuxChannelProps = {
@@ -28,4 +30,7 @@ export type AuxChannelProps = {
   min: number
   max: number
   defaultValue: number
+  possValues: string[]
+  currMetrics: Metrics
+  setMetrics: React.SetStateAction<Metrics>
 }
