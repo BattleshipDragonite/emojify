@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
 import querystring from 'querystring';
-import { createPlaylistURL, getPlaylistID } from './controllers/playlist';
+import { createPlaylistURL, createPlaylist, addTracks } from './controllers/playlist';
 import { createCredentialsObject, createAuthURL } from './controllers/spotifyAuth';
 import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
 import { routes } from './routes';
@@ -138,56 +138,8 @@ app.get('/recommendations', async (req, res) => {
     })
 })
 
-
-
-app.get('/createPlaylist', createPlaylistURL, async (req, res) => {
-  // in middleware, make get request to https://api.spotify.com/v1/me endpoint to grab user id
-  // then make a post request to https://api.spotify.com/v1/users/{user_id}/playlists to create playlist
-  const playlistURL = res.locals.playlistURL
-  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-  const accessToken = tokenData.access_token;
-  const data = {
-    "name": "Test Playlist",
-    "description": "New playlist description",
-    "public": true
-  };
-  const config = {
-    headers: {
-      'content-type': 'Content-Type: application/json',
-      'Authorization': 'Bearer ' + accessToken,
-    },
-  }
-  axios.post(playlistURL, data, config)
-    .then(() => {
-      return res.status(200)
-    }).catch((error) => {
-      console.log({ error })
-    })
-})
-
-
-app.get('/addToPlaylist', getPlaylistID, async (req, res) => {
-  const addTrackURL = res.locals.addTracksURL;
-  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-  const accessToken = tokenData.access_token;
-  const tracks = {
-    "uris": [
-      "spotify:track:6aLl1AjRbo4ddJZh7Hzazx", "spotify:track:6TaqooOXAEcijL6G1AWS2K"
-    ],
-    "position": 0
-  };
-  const config = {
-    headers: {
-      'content-type': 'Content-Type: application/json',
-      'Authorization': 'Bearer ' + accessToken,
-    },
-  }
-  axios.post(addTrackURL, tracks, config)
-    .then(() => {
-      return res.status(200)
-    }).catch((error) => {
-      console.log({ error })
-    })
+app.get('/generatePlaylist', createPlaylistURL, createPlaylist, addTracks, async (req, res) => {
+  return res.status(200).json(res.locals.final)
 })
 
 
