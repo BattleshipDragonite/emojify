@@ -8,9 +8,9 @@ export type Metrics = {
   valence: number
   loudness: number
   tempo: number
-  key?: number
-  mode?: number
-  time_signature?: number
+  key?: number | null
+  mode?: number | null
+  time_signature?: number | null
 }
 
 export type MetricChannelProps = {
