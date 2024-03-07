@@ -18,6 +18,9 @@ const EmojifyPage = () => {
         valence: 0.5,
         loudness: -25,
         tempo: 120,
+        key: null,
+        mode: null,
+        time_signature: null
       });
 
     const genres = Object.keys(genresMap)

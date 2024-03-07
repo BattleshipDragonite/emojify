@@ -20,7 +20,7 @@ const AuxChannel = ({
     const val: string = e.target?.value;
     setMetrics({
       ...currMetrics,
-      [metric]: parseFloat(val)
+      [metric]: parseInt(val)
     });
   }
 
