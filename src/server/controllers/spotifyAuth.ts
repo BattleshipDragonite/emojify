@@ -29,7 +29,7 @@ export const createCredentialsObject = (req: Request, res: Response, next: NextF
         state: randomString
     }
     res.locals.credentialsObject = credentialsObject;
-    return next()
+    next()
 }
 
 // create authorization URL for Spotify OAuth process
