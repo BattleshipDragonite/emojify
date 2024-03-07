@@ -10,9 +10,10 @@ dotenv.config();
 export const generateRecommendations = (req: Request, res: Response, next: NextFunction): void => {
     const randomEmoji = createRandomEmojiQuery();
     const recommendationURL = generateRecommendationsURL(randomEmoji);
-
+    // pull access token from token.json. To do - refactor to session storage
     const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
     const accessToken = tokenData.access_token;
+
     axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
         .then((response) => {
             const tracks = response.data.tracks;

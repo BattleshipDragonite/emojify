@@ -20,7 +20,6 @@ export const createPlaylistURL = (req: Request, res: Response, next: NextFunctio
         })
 }
 
-// @Christina - for this function, the front end will send us the playlist name and whether they want it to be public
 // creates Spotify playlist and saves playlist ID for adding to playlist
 export const createPlaylist = (req: Request, res: Response, next: NextFunction): void => {
     const playlistURL = res.locals.playlistURL;
@@ -50,7 +49,6 @@ export const createPlaylist = (req: Request, res: Response, next: NextFunction):
         })
 }
 
-// @Christina - for this one we'll receive an array of tracks from the front end
 // adds tracks to playlist
 export const addTracks = (req: Request, res: Response, next: NextFunction): void => {
     const addTrackURL = res.locals.addTracksURL;
@@ -77,17 +75,3 @@ export const addTracks = (req: Request, res: Response, next: NextFunction): void
             console.log({ error })
         })
 }
-
-// // no longer needed :(
-// // fetches ID of created playlist in order to add new tracks
-// export const getPlaylistID = (req: Request, res: Response, next: NextFunction): void => {
-//     const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
-//     const currentPlaylistEndpoint = process.env.currentPlaylistEndpoint;
-//     axios.get(currentPlaylistEndpoint, { headers: { Authorization: 'Bearer ' + data.access_token } })
-//         .then((response) => {
-//             // console.log(response.data.items[0].id);
-//             const playlist_id = response.data.items[0].id;
-//             //I GOT IT!!!!!!!!!!!
-//             res.locals.addTracksURL = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
-//         })
-// }
