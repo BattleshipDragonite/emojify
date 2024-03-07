@@ -1,4 +1,4 @@
-import { randomInteger, randomElement } from './helpers'
+import { randomInteger, randomElement, randomFloat } from './helpers'
 import GraphemeSplitter from 'grapheme-splitter';
 
 const splitter = new GraphemeSplitter()
@@ -18,6 +18,21 @@ interface Metric {
 
 interface MetricsObject {
   [key: string]: Metric;
+}
+
+type Metrics = {
+  acousticness?: number
+  danceability?: number
+  energy?: number
+  instrumentalness?: number
+  liveness?: number
+  loudness?: number
+  mode?: number
+  speechiness?: number
+  tempo?: number
+  valence?: number
+  key?: number
+  time_signature?: number
 }
 
 export const genresMap: GenreMap = {
@@ -141,6 +156,8 @@ export const genresMap: GenreMap = {
   "🌎": { type: "genre", value: "world-music" },
 };
 
+
+// TODO Delete if not used
 const metricsMap: MetricsMap = {
   "😐": {
     type: "danceability",
@@ -224,14 +241,93 @@ const metricsMap: MetricsMap = {
   },
 }
 
+const metricsOptionObj : any = {
+  "danceability": {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
+  "instrumentalness" : {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
+  "energy" :{
+    min: 0,
+    max: 1,
+    type: "float"
+  },
+  "key" : {
+    min: 0,
+    max: 11,
+    type: "integer"
+  },
+  "time_signature": {
+    min: 3,
+    max: 7,
+    type: "integer",
+  },
+  "mode" : {
+    min: 0,
+    max: 1,
+    type: "integer"
+  },
+  "liveness": {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
+  "valence" : {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
+  "loudness" :{
+    min: -60,
+    max: 0,
+    type: "float"
+  },
+  "tempo" : {
+    min: 0,
+    max: 240,
+    type: "float"
+  },
+}
+
+
+
+
+
 const recommendationsURL = "https://api.spotify.com/v1/recommendations"
+
+export const createRandomGenreEmoji = () : string => {
+  const genresOptions = Object.keys(genresMap);
+  const numGenres = randomInteger(1, 5);
+  const genres = Array.from({ length: numGenres }, () => randomElement(genresOptions));
+  return genres.join("");  
+}
+
+export const createRandomMetricsObject = () => {
+  const metricsOptions = Object.keys(metricsOptionObj);
+  const metricsObject : any = {};  
+  const numMetrics = randomInteger(1,5);
+  const metrics = Array.from({length: numMetrics}, () => randomElement(metricsOptions))
+
+  for (const metric of metrics) {  
+    metricsObject[metric] = metricsOptionObj[metric].type === "integer" ? randomInteger(metricsOptionObj[metric].min,metricsOptionObj[metric].max) : randomFloat(metricsOptionObj[metric].min,metricsOptionObj[metric].max)
+  }
+  return metricsObject;
+}
+
+
+
 
 export const createRandomEmojiQuery = (): string => {
   const genresOptions = Object.keys(genresMap);
   const metricsOptions = Object.keys(metricsMap);
 
   const numGenres = randomInteger(1, 5);
-  const numMetrics = randomInteger(1, 10);
+  const numMetrics = randomInteger(1,10);
 
   const genres = Array.from({ length: numGenres }, () => randomElement(genresOptions));
   const metrics = Array.from({ length: numMetrics }, () => randomElement(metricsOptions));
@@ -297,3 +393,16 @@ export const generateRecommendationsURL = (emojis: string): string => {
 }
 
 
+const metricsTestObj = {
+  danceability : .5,
+  tempo: 120,
+  loudness: -60,
+  valence: .5,
+  speechiness: .2,
+}
+
+const parseMetrics = (metricsObj: any) => {
+  return "&" + Object.entries(metricsObj).map(([metric,value],i)=>{
+    return `target_${metric}=${value}`;
+  }).join('&')
+}

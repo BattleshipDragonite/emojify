@@ -1,3 +1,5 @@
+import e from "express";
+
 export const randomElement = (array : string[]) => {
   if (array.length === 0) {
     throw new Error("Array cannot be empty");
@@ -11,4 +13,9 @@ export const randomInteger = (min: number, max: number): number => {
   }
   return min + Math.floor(Math.random() * (max - min + 1));
 };
+
+export const randomFloat = (min: number, max: number) : number => {
+  if (min === max) return min;
+  return min + Math.random() * (max - min + 1);
+}
 
