@@ -3,10 +3,12 @@ import MetricsMixer from "../../components/MetricsMixer";
 import { genresMap } from "../../server/utils/emojiDict.ts";
 import { Modal, Button } from "flowbite-react";
 import { Carousel } from "flowbite-react";
+import NavBar from "../../components/NavBar.tsx";
 
 const EmojifyPage = () => {
   const [genre, setGenre] = useState("🎼");
-  const [openModal, setOpenModal] = useState(false);
+  const [openSongsModal, setOpenSongsModal] = useState(false);
+  const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
 
   const songs = [
     {
@@ -34,9 +36,23 @@ const EmojifyPage = () => {
     }
   }
 
+  const searchFunction = () => {
+    // input params here
+    // input fetch request to spotify API with params as body
+
+    setSongIndex(0);
+    setOpenSongsModal(true);
+  }
+
+  const playlistFunction = () => {
+    setOpenPlaylistModal(true)
+  }
+
   const genres = Object.keys(genresMap);
 
   return (
+    <>
+    <NavBar />
     <div id="user-interface">
       <div className="genre-div">
         <h1 className="text-8xl m-20">{genre}</h1>
@@ -113,29 +129,13 @@ const EmojifyPage = () => {
         </div>
       </div>
       <MetricsMixer />
-      <button
-        onClick={() => setOpenModal(true)}
-        type="submit"
-        className="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-purple-700 rounded-lg border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-      >
-        <svg
-          className="w-4 h-4 me-2"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 20 20"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-          />
-        </svg>
-        Search
-      </button>
-      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+      <div className="flex flex-col items-middle justify-center">
+          <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
+
+      <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
+      </div>
+
+      <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
         <Modal.Header>Selected Songs</Modal.Header>
         <Modal.Body>
           <div className="flex flex-col justify-center items-center">
@@ -153,11 +153,23 @@ const EmojifyPage = () => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-between">
-            <Button color="purple" onClick={() => setOpenModal(false)}> Add song</Button>
+            <Button color="purple" onClick={() => setOpenSongsModal(false)}> Add song</Button>
             <Button color="red" onClick={() => nextSong()}>Next Song</Button>
         </Modal.Footer>
       </Modal>
+
+
+      <Modal show={openPlaylistModal} onClose={() => setOpenPlaylistModal(false)}>
+        <Modal.Header>Playlist</Modal.Header>
+        <Modal.Body>
+          {/* Add a playlist component here */}
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+            <Button color="purple" onClick={() => setOpenPlaylistModal(false)}> Add Playlist to Spotify</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
+    </>
   );
 };
 
