@@ -264,7 +264,7 @@ export const generateRecommendationsURL = (emojis: string): string => {
 
   const buildGenreQuery = (genres: string[]): string => {
     // Handle duplicate genre entries
-    const genreSet = new Set(genres);
+    const genreSet = new Set(genres.slice(0,5));
     const genreList = Array.from(genreSet).join(",")
     return "seed_genres=" + encodeURIComponent(genreList)
   }
