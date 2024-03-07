@@ -1,6 +1,46 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+/* * {
+    border: red 1px solid;
+} */
+
+.genre-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.keys {
+    border: black solid 0.2px;
+    border-radius: 5px;
+    height: 60px;
+    width: 60px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    box-shadow: 0.2px 0.2px 0.2px 0.2px;
+}
+
+.keys:hover {
+    cursor: pointer;
+    scale: 1.2;
+}
+
+.keys h1 {
+    font-size: x-large;
+}
 
 body {
   display: flex;
