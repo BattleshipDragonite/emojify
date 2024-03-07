@@ -48,13 +48,40 @@ export const createAuthURL = (req: Request, res: Response, next: NextFunction): 
 
 // gets access and refresh token as part of OAuth process
 export const getToken = (req: Request, res: Response, next: NextFunction): void => {
-
-
-
-
+    const { code, queryState } = req.query;
+    const { cookieState } = req.cookies[process.env.stateKey]
+    const redirectURI = `http://localhost:${process.env.PORT}/callback`
+    if (cookieState !== queryState) {
+        res.redirect('/#' + querystring.stringify({
+            error: 'state does not match'
+        }))
+    } else {
+        const authOptions = {
+            code: code,
+            redirect_uri: redirectURI,
+            grant_type: 'authorization_code',
+        }
+        const config = {
+            headers: {
+                "content-type": 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + (new (Buffer.from as any)(process.env.clientID + ':' + process.env.clientSecret).toString('base64'))
+            }
+        };
+        res.clearCookie(process.env.stateKey);
+        axios.post(process.env.spotifyTokenURL, authOptions, config)
+            .then((response) => {
+                fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+                    if (err) { console.log(err) }
+                })
+                res.locals.userData = response.data;
+                next()
+            }).catch((error) => {
+                console.log({ error })
+            })
+    }
 }
 
-
+// refreshes Spotify OAuth token
 export const getNewToken = (req: Request, res: Response, next: NextFunction): void => {
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
     const refresh_token = data.refresh_token;
@@ -80,5 +107,4 @@ export const getNewToken = (req: Request, res: Response, next: NextFunction): vo
         }).catch((error) => {
             console.log({ error })
         })
-
 }

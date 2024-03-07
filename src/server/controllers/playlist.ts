@@ -27,7 +27,7 @@ export const createPlaylist = (req: Request, res: Response, next: NextFunction):
     const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
     const accessToken = tokenData.access_token;
 
-    // const {name, public} = req.body;
+    // const {name, public}: {name: String; public: Boolean} = req.body;
 
     const data = {
         "name": "Test Playlist",
