@@ -4,16 +4,16 @@ export type Metrics = {
   energy: number
   instrumentalness: number
   liveness: number
-  loudness: number
-  mode: number
   speechiness: number
-  tempo: number
   valence: number
-  key?: number
-  time_signature?: number
+  loudness: number
+  tempo: number
+  key?: number | null
+  mode?: number | null
+  time_signature?: number | null
 }
 
-export type ChannelProps = {
+export type MetricChannelProps = {
   metric: string
   min: number
   max: number
@@ -21,4 +21,16 @@ export type ChannelProps = {
   step: number
   maxEmoji: string
   minEmoji: string
+  currMetrics: Metrics
+  setMetrics: React.SetStateAction<Metrics>
+}
+
+export type AuxChannelProps = {
+  metric: string
+  min: number
+  max: number
+  defaultValue: number
+  possValues: string[]
+  currMetrics: Metrics
+  setMetrics: React.SetStateAction<Metrics>
 }

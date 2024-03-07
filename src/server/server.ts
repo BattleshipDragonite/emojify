@@ -1,11 +1,12 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
-import querystring from 'querystring';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
-import crypto from 'crypto';
+import querystring from 'querystring';
+import { createPlaylistURL, getPlaylistID } from './controllers/playlist';
+import { createCredentialsObject, createAuthURL } from './controllers/spotifyAuth';
 import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
 import { routes } from './routes';
 
@@ -31,48 +32,13 @@ const stateKey = "spotify_auth_state";
 
 
 // TYPES
-type AuthCredentials = {
-  response_type: string,
-  client_id: string,
-  scope: string,
-  redirect_uri: string,
-  state: string
-}
 type AuthOptions = {
 
 }
 
-
-// Generate Random String
-const generateRandomString = (length: number): string => {
-  return crypto.randomBytes(60).toString('hex').slice(0, length)
-}
-
-// TODO - Move to server/controllers/spotifyAuth.ts
-const createCredentialsObject = (): AuthCredentials => {
-  const randomString = generateRandomString(16)
-  const credentialsObject = {
-    response_type: "code",
-    client_id: clientID,
-    scope: 'user-read-private user-read-email playlist-modify-public',
-    redirect_uri: redirectURI,
-    state: randomString
-  }
-  return credentialsObject;
-}
-
-
-
 // SEND Request to spotify
-app.get("/login", (req, res) => {
-  const credentialsObject = createCredentialsObject();
-  const state = credentialsObject.state;
-
-  const credentialsString = querystring.stringify(credentialsObject);
-  const authURL = `${spotifyAuthURL + credentialsString}`;
-
-  res.cookie(stateKey, state);
-  res.redirect(authURL)
+app.get("/login", createCredentialsObject, createAuthURL, (req, res) => {
+  res.redirect(res.locals.authURL)
 })
 
 // Receive Access token from spotify
@@ -81,7 +47,10 @@ app.get('/callback', async (req, res) => {
   const { cookieState } = req.cookies[stateKey]
 
   if (cookieState !== queryState) {
-    //TODO SEND TO ERROR HANDLER    
+    //TODO SEND TO ERROR HANDLER
+    res.redirect('/#' + querystring.stringify({
+      error: 'state does not match'
+    }))
   } else {
     const authOptions = {
       code: code,
@@ -141,8 +110,9 @@ app.get('/recommendations', async (req, res) => {
   const randomEmoji = createRandomEmojiQuery();
   const recommendationURL = generateRecommendationsURL(randomEmoji);
 
-  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-  const accessToken = data.access_token;
+  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const accessToken = tokenData.access_token;
+  console.log(recommendationURL)
   axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
     .then((response) => {
       fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
@@ -158,6 +128,7 @@ app.get('/recommendations', async (req, res) => {
           artistName: sorted[i].artists[0].name,
           trackName: sorted[i].name,
           trackID: sorted[i].id,
+          trackURI: sorted[i].uri,
           previewURL: sorted[i].preview_url
         });
       }
@@ -167,17 +138,63 @@ app.get('/recommendations', async (req, res) => {
     })
 })
 
-app.get('/addToPlaylist',(req,res)=>{
-  const addToPlaylistURL = "https://api.spotify.com/v1/playlists/"
+
+
+app.get('/createPlaylist', createPlaylistURL, async (req, res) => {
+  // in middleware, make get request to https://api.spotify.com/v1/me endpoint to grab user id
+  // then make a post request to https://api.spotify.com/v1/users/{user_id}/playlists to create playlist
+  const playlistURL = res.locals.playlistURL
+  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const accessToken = tokenData.access_token;
+  const data = {
+    "name": "Test Playlist",
+    "description": "New playlist description",
+    "public": true
+  };
+  const config = {
+    headers: {
+      'content-type': 'Content-Type: application/json',
+      'Authorization': 'Bearer ' + accessToken,
+    },
+  }
+  axios.post(playlistURL, data, config)
+    .then(() => {
+      return res.status(200)
+    }).catch((error) => {
+      console.log({ error })
+    })
 })
 
+
+app.get('/addToPlaylist', getPlaylistID, async (req, res) => {
+  const addTrackURL = res.locals.addTracksURL;
+  const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
+  const accessToken = tokenData.access_token;
+  const tracks = {
+    "uris": [
+      "spotify:track:6aLl1AjRbo4ddJZh7Hzazx", "spotify:track:6TaqooOXAEcijL6G1AWS2K"
+    ],
+    "position": 0
+  };
+  const config = {
+    headers: {
+      'content-type': 'Content-Type: application/json',
+      'Authorization': 'Bearer ' + accessToken,
+    },
+  }
+  axios.post(addTrackURL, tracks, config)
+    .then(() => {
+      return res.status(200)
+    }).catch((error) => {
+      console.log({ error })
+    })
+})
 
 
 // ERROR HANDLER
 app.use("*", (req, res) => {
   console.log('error')
 })
-
 
 app.listen(PORT, () => {
   console.log(`Server running on PORT:${PORT} 🌴`)

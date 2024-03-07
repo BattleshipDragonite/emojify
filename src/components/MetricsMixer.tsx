@@ -1,25 +1,13 @@
 import React, { useState, useRef } from "react";
 import MetricChannel from "./MetricChannel";
-import { Metrics } from "../client/types";
+import AuxChannel from "./AuxChannel";
 
-const MetricsMixer = () => {
-  const [metrics, setMetrics] = useState<Metrics>({
-    acousticness: 1,
-    danceability: 1,
-    energy: 1,
-    instrumentalness: 1,
-    liveness: 1,
-    loudness: 1,
-    mode: 1,
-    speechiness: 1,
-    tempo: 1,
-    valence: 1
-  });
+const MetricsMixer = ({ currMetrics, setMetrics }) => {
 
   return (
     <>
       <div id="mixer">
-        <MetricChannel 
+        <MetricChannel
           metric="acousticness"
           min={0}
           max={1}
@@ -27,6 +15,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🏞️"
           minEmoji="🏙️"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="danceability"
@@ -36,6 +26,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🥳"
           minEmoji="😐"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="energy"
@@ -45,6 +37,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🔋"
           minEmoji="🪫"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="instrumentalness"
@@ -54,6 +48,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🎺"
           minEmoji="🎙️"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="liveness"
@@ -63,6 +59,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🎫"
           minEmoji="🎧"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="speechiness"
@@ -72,6 +70,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🗣️"
           minEmoji="🎶"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="valence"
@@ -81,6 +81,8 @@ const MetricsMixer = () => {
           step={0.01}
           maxEmoji="🥹"
           minEmoji="🥺"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="loudness"
@@ -90,6 +92,8 @@ const MetricsMixer = () => {
           step={1}
           maxEmoji="💥"
           minEmoji="🦗"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
         <MetricChannel 
           metric="tempo"
@@ -99,6 +103,51 @@ const MetricsMixer = () => {
           step={1}
           maxEmoji="🚀"
           minEmoji="🐌"
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
+        />
+      </div>
+      <div id="auxiliary">
+        <AuxChannel 
+          metric="key"
+          min={-1}
+          max={11}
+          defaultValue={0}
+          possValues={[
+            'n/a',
+            'C',
+            'C#/D♭',
+            'D',
+            'D#/E♭',
+            'E',
+            'F',
+            'F#/G♭',
+            'G',
+            'G#/A♭',
+            'A',
+            'A#/B♭',
+            'B'
+          ]}
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
+        />
+        <AuxChannel 
+          metric="mode"
+          min={0}
+          max={1}
+          defaultValue={1}
+          possValues={['minor', 'major']}
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
+        />
+        <AuxChannel 
+          metric="time_signature"
+          min={3}
+          max={7}
+          defaultValue={4}
+          possValues={['3/4', '4/4', '5/4', '6/4', '7/4']}
+          currMetrics={currMetrics}
+          setMetrics={setMetrics}
         />
       </div>
     </>

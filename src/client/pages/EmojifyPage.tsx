@@ -1,14 +1,28 @@
-import React, { useState } from "react";
-import MetricsMixer from "../../components/MetricsMixer";
-import { genresMap } from "../../server/utils/emojiDict.ts";
-import { Modal, Button } from "flowbite-react";
-import { Carousel } from "flowbite-react";
+import React, {useState} from 'react'
+import MetricsMixer from '../../components/MetricsMixer'
+import {genresMap} from '../../server/utils/emojiDict.ts'
+import { Modal, Button } from 'flowbite-react'
+import { Metrics } from '../types.ts'
 import NavBar from "../../components/NavBar.tsx";
 
 const EmojifyPage = () => {
   const [genre, setGenre] = useState("🎼");
   const [openSongsModal, setOpenSongsModal] = useState(false);
   const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
+    const [metrics, setMetrics] = useState<Metrics>({
+        acousticness: 0,
+        danceability: 0.5,
+        energy: 0.6,
+        instrumentalness: 0.5,
+        liveness: 0.2,
+        speechiness: 0.33,
+        valence: 0.5,
+        loudness: -25,
+        tempo: 120,
+        key: null,
+        mode: null,
+        time_signature: null
+      });
 
   const songs = [
     {
@@ -128,7 +142,7 @@ const EmojifyPage = () => {
           })}
         </div>
       </div>
-      <MetricsMixer />
+      <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
       <div className="flex flex-col items-middle justify-center">
           <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
 
