@@ -249,7 +249,8 @@ export const generateRecommendationsURL = (emojis: string): string => {
       if (Array.isArray(genresMap[emoji].value)) {
         seedGenres.push(...genresMap[emoji].value)
       } else {
-        seedGenres.push(...genresMap[emoji].value)
+        // @ts-ignore
+        seedGenres.push(genresMap[emoji].value)
       }
 
     }

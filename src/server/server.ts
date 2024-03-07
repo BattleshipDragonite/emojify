@@ -4,6 +4,7 @@ import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import cors from 'cors';
+import querystring from 'querystring';
 import { createPlaylistURL, getPlaylistID } from './controllers/playlist';
 import { createCredentialsObject, createAuthURL } from './controllers/spotifyAuth';
 import { generateRecommendationsURL, createRandomEmojiQuery } from './utils/emojiDict';
@@ -46,7 +47,10 @@ app.get('/callback', async (req, res) => {
   const { cookieState } = req.cookies[stateKey]
 
   if (cookieState !== queryState) {
-    //TODO SEND TO ERROR HANDLER    
+    //TODO SEND TO ERROR HANDLER
+    res.redirect('/#' + querystring.stringify({
+      error: 'state does not match'
+    }))
   } else {
     const authOptions = {
       code: code,
@@ -108,7 +112,7 @@ app.get('/recommendations', async (req, res) => {
 
   const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
   const accessToken = tokenData.access_token;
-  // console.log(recommendationURL)
+  console.log(recommendationURL)
   axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
     .then((response) => {
       fs.writeFile(path.join(__dirname, '../../recommendations.json'), JSON.stringify(response.data), err => {
@@ -161,16 +165,6 @@ app.get('/createPlaylist', createPlaylistURL, async (req, res) => {
     })
 })
 
-// app.get('/getPlaylists', async (req, res) => {
-//   const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../token.json'), 'utf8'));
-//   const accessToken = tokenData.access_token;
-//   axios.get("https://api.spotify.com/v1/me/playlists?limit=1&offset=0", { headers: { Authorization: 'Bearer ' + accessToken } })
-//     .then(() => {
-
-//     }).catch((error) => {
-//       console.log({ error })
-//     })
-// })
 
 app.get('/addToPlaylist', getPlaylistID, async (req, res) => {
   const addTrackURL = res.locals.addTracksURL;
