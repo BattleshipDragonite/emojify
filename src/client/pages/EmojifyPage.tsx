@@ -68,9 +68,11 @@ const EmojifyPage = () => {
     <>
     <NavBar />
     <div id="user-interface">
+    <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
       <div className="genre-div">
         <h1 className="text-8xl m-20">{genre}</h1>
       </div>
+      <Button className='mb-10' onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
       <div className="keyboard">
         <div className="flex">
           {genres.slice(0, 20).map((ele) => {
@@ -143,11 +145,11 @@ const EmojifyPage = () => {
         </div>
       </div>
       <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
-      <div className="flex flex-col items-middle justify-center">
+      {/* <div className="flex flex-col items-middle justify-center">
           <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
 
       <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
-      </div>
+      </div> */}
 
       <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
         <Modal.Header>Selected Songs</Modal.Header>
