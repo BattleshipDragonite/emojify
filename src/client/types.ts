@@ -13,6 +13,16 @@ export type Metrics = {
   time_signature?: number | null
 }
 
+export type Track = {
+  albumArt: string
+  albumName: string
+  artistName: string
+  trackName: string
+  trackId: string
+  trackURI: string
+  previewURL: string
+}
+
 export type MetricChannelProps = {
   metric: string
   min: number
@@ -22,7 +32,7 @@ export type MetricChannelProps = {
   maxEmoji: string
   minEmoji: string
   currMetrics: Metrics
-  setMetrics: React.SetStateAction<Metrics>
+  setMetrics: (arg: Metrics) => void
 }
 
 export type AuxChannelProps = {
@@ -32,5 +42,5 @@ export type AuxChannelProps = {
   defaultValue: number
   possValues: string[]
   currMetrics: Metrics
-  setMetrics: React.SetStateAction<Metrics>
+  setMetrics: (arg: Metrics) => void
 }

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { MetricsMixer, AuxMixer } from "../../components/MetricsMixer";
 import { genresMap } from "../../server/utils/emojiDict.ts";
 import { Modal, Button } from "flowbite-react";
-import { Metrics } from "../types.ts";
+import { Metrics, Track } from "../types.ts";
 import NavBar from "../../components/NavBar.tsx";
 import Background from "../assets/28011782_7301421.svg";
 
 const EmojifyPage = () => {
-  const [genre, setGenre] = useState("🎼");
+  const [genre, setGenre] = useState<string>("🎼");
   const [openSongsModal, setOpenSongsModal] = useState(false);
   const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
   const [metrics, setMetrics] = useState<Metrics>({
@@ -22,46 +22,56 @@ const EmojifyPage = () => {
     tempo: 120,
     key: null,
     mode: null,
-    time_signature: null,
+    time_signature: null
   });
-
-  const songs = [
-    {
-      title: "Song Title1",
-      artist: "Artist1",
-    },
-    {
-      title: "Song Title2",
-      artist: "Artist2",
-    },
-    {
-      title: "Song Title3",
-      artist: "Artist3",
-    },
-  ];
-
-  const [songIndex, setSongIndex] = useState(0);
+  const [songs, setSongs] = useState<Track[]>([])
+  const [songIndex, setSongIndex] = useState<number>(0)
+  const [playlistDraft, setPlaylistDraft] = useState<string[]>([])
 
   const nextSong = () => {
-    if (songIndex != songs.length - 1) {
-      setSongIndex(songIndex + 1);
-    } else {
-      setSongIndex(0);
-    }
-  };
+    if (songIndex != songs.length - 1) setSongIndex(songIndex + 1)
+    else setSongIndex(0)
+  }
 
-  const searchFunction = () => {
+  const searchFunction = async () => {
     // input params here
     // input fetch request to spotify API with params as body
-
-    setSongIndex(0);
-    setOpenSongsModal(true);
-  };
+    const recommendationObj = {
+      genre: genre,
+      metrics: metrics
+    }
+    try {
+      const response = await fetch('/recommendations', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recommendationObj)
+      })
+      const result = await response.json();
+      console.log("Success", result)
+      setSongIndex(0);
+      setSongs(result);
+      setOpenSongsModal(true);
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  }
 
   const playlistFunction = () => {
-    setOpenPlaylistModal(true);
-  };
+    setOpenPlaylistModal(true)
+  }
 
+  const savePlaylistFunction = () => {
+    //TODO
+    // Add a post req to "/generatePlaylist"
+    // Request Object will be an array of trackIDs
+    
+  }
+
+  const addToPlaylist = (trackURI: string) => {
+    setPlaylistDraft([...playlistDraft, trackURI]);
+  }
   const genres = Object.keys(genresMap);
 
   return (
@@ -182,33 +192,28 @@ const EmojifyPage = () => {
       <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
       </div> */}
 
-        <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
-          <Modal.Header>Selected Songs</Modal.Header>
-          <Modal.Body>
-            <div className="flex flex-col justify-center items-center">
-              <img src="" alt="Album art" />
-              <audio src="" controls />
+      <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
+        <Modal.Header>Selected Songs</Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-col justify-center items-center">
+            <img src={songs[songIndex]?.albumArt} alt="Album art" />
+            <audio src={songs[songIndex]?.previewURL} controls />
 
-              <div className="space-y-6">
-                <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                  {songs[songIndex].title}
-                </h2>
-                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                  {songs[songIndex].artist}
-                </p>
-              </div>
+            <div className="space-y-6">
+              <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                {songs[songIndex]?.trackName}
+              </h2>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                {songs[songIndex]?.artistName}
+              </p>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-between">
-            <Button color="purple" onClick={() => setOpenSongsModal(false)}>
-              {" "}
-              Add song
-            </Button>
-            <Button color="red" onClick={() => nextSong()}>
-              Next Song
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+            <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
+            <Button color="red" onClick={() => nextSong()}>Next Song</Button>
+        </Modal.Footer>
+      </Modal>
 
         <Modal
           show={openPlaylistModal}
