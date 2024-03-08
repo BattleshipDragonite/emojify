@@ -21,11 +21,11 @@ router.get('/refreshToken', getNewToken, async (req, res) => {
 })
 
 // get recommended tracks
-router.get('/recommendations', generateRecommendations, async (req, res) => {
+router.post('/recommendations', generateRecommendations, async (req, res) => {
     return res.status(200).json(res.locals.recommendedTracks)
 })
 
 // create and save completed playlist to Spotify
-router.get('/generatePlaylist', createPlaylistURL, createPlaylist, addTracks, async (req, res) => {
+router.post('/generatePlaylist', createPlaylistURL, createPlaylist, addTracks, async (req, res) => {
     return res.status(200).json(res.locals.final)
 })
