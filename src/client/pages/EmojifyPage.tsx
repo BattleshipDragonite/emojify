@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
-import MetricsMixer from '../../components/MetricsMixer'
-import {genresMap} from '../../server/utils/emojiDict.ts'
-import { Modal, Button } from 'flowbite-react'
-import { Metrics, Track } from '../types.ts'
+import React, { useState } from "react";
+import { MetricsMixer, AuxMixer } from "../../components/MetricsMixer";
+import { genresMap } from "../../server/utils/emojiDict.ts";
+import { Modal, Button } from "flowbite-react";
+import { Metrics, Track } from "../types.ts";
 import NavBar from "../../components/NavBar.tsx";
+import Background from "../assets/28011782_7301421.svg";
 
 const EmojifyPage = () => {
   const [genre, setGenre] = useState<string>("🎼");
@@ -74,86 +75,122 @@ const EmojifyPage = () => {
   const genres = Object.keys(genresMap);
 
   return (
-    <>
-    <NavBar />
-    <div id="user-interface">
-    <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
-      <div className="genre-div">
-        <h1 className="text-8xl m-20">{genre}</h1>
-      </div>
-      <Button className='mb-10' onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
-      <div className="keyboard">
-        <div className="flex">
-          {genres.slice(0, 20).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
-        </div>
-        <div className="flex">
-          {genres.slice(20, 36).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
-        </div>
-        <div className="flex">
-          {genres.slice(36, 55).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
-        </div>
+    <div>
+      <div
+        style={{
+          backgroundImage: `url(${Background})`,
+          height: "100vh",
+          width: "100vw",
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          minHeight: "100%",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <NavBar />
+        <div className="flex flex-col items-center">
+          <div className="flex justify-between w-full">
+            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
 
-        <div className="flex">
-          {genres.slice(55, 75).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
-        </div>
+            <div className="flex flex-col mr-50 ml-50">
+              <Button
+                onClick={() => playlistFunction()}
+                className="m-3"
+                gradientDuoTone="purpleToPink"
+              >
+                View Playlist 🎶
+              </Button>
+              <div className="genre-div">
+                <h1 className="text-8xl m-20">{genre}</h1>
+              </div>
+              <Button
+                className="mb-10"
+                onClick={() => searchFunction()}
+                color="purple"
+              >
+                Find Songs 🎧
+              </Button>
+            </div>
 
-        <div className="flex">
-          {genres.slice(75, 90).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
-        </div>
+            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+          </div>
+          <div className="keyboard">
+            <div className="flex">
+              {genres.slice(0, 20).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+            <div className="flex">
+              {genres.slice(20, 36).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+            <div className="flex">
+              {genres.slice(36, 55).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
 
-        <div className="flex">
-          {genres.slice(90).map((ele) => {
-            return (
-              <>
-                <div className="keys" onClick={() => setGenre(ele)}>
-                  <h1>{ele}</h1>
-                </div>
-              </>
-            );
-          })}
+            <div className="flex">
+              {genres.slice(55, 75).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+
+            <div className="flex">
+              {genres.slice(75, 90).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+
+            <div className="flex">
+              {genres.slice(90).map((ele) => {
+                return (
+                  <>
+                    <div className="keys" onClick={() => setGenre(ele)}>
+                      <h1>{ele}</h1>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+          </div>
         </div>
-      </div>
-      <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+        {/* <div className="flex flex-col items-middle justify-center">
+          <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
+
+      <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
+      </div> */}
 
       <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
         <Modal.Header>Selected Songs</Modal.Header>
@@ -178,18 +215,21 @@ const EmojifyPage = () => {
         </Modal.Footer>
       </Modal>
 
-
-      <Modal show={openPlaylistModal} onClose={() => setOpenPlaylistModal(false)}>
-        <Modal.Header>Playlist</Modal.Header>
-        <Modal.Body>
-          {/* Add a playlist component here */}
-        </Modal.Body>
-        <Modal.Footer className="flex justify-between">
-            <Button color="purple" onClick={() => setOpenPlaylistModal(false)}> Add Playlist to Spotify</Button>
-        </Modal.Footer>
-      </Modal>
+        <Modal
+          show={openPlaylistModal}
+          onClose={() => setOpenPlaylistModal(false)}
+        >
+          <Modal.Header>Playlist</Modal.Header>
+          <Modal.Body>{/* Add a playlist component here */}</Modal.Body>
+          <Modal.Footer className="flex justify-between">
+            <Button color="purple" onClick={() => setOpenPlaylistModal(false)}>
+              {" "}
+              Add Playlist to Spotify
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
-    </>
   );
 };
 
