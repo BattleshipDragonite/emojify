@@ -1,9 +1,9 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-/* * {
-    border: red 1px solid;
-} */
+html {
+  background-color: #F2ECC9;
+}
 
 .genre-div {
     display: flex;
@@ -21,21 +21,22 @@
 }
 
 .keys {
-    border: black solid 0.2px;
+    border: black solid 0.1px;
     border-radius: 5px;
     height: 60px;
     width: 60px;
-    background-color: white;
+    background-color: #B5C0D0;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 2px;
-    box-shadow: 0.2px 0.2px 0.2px 0.2px;
+    box-shadow: 0.4px 0.4px 0.4px 0.4px;
+    color: #B5C0D0;
 }
 
 .keys:hover {
     cursor: pointer;
-    scale: 1.2;
+    scale: 1.5;
 }
 
 .keys h1 {
@@ -55,7 +56,7 @@ body {
 }
 
 #mixer {
-  background-color: #c5c5c5;
+  background-color: #CCD3CA;
   width: 30%;
   border-radius: 0.5em;
   margin: 1em;
@@ -85,7 +86,7 @@ body {
 }
 
 #auxiliary {
-  background-color: #c5c5c5;
+  background-color: #CCD3CA;
   width: 30%;
   border-radius: 0.5em;
   margin: 1em;
@@ -99,4 +100,41 @@ body {
 .top-panel {
   display: flex;
   align-items: center;
+}
+
+.logo {
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    transform-origin: bottom;
+}
+
+.text {
+  margin: 2em;
+}
+
+
+.logo:hover {
+  cursor: pointer;
+  animation-name: bounce;
+  animation-timing-function: ease;
+}
+@keyframes bounce {
+0%   { transform: translateY(0); }
+50%  { transform: translateY(-50px); }
+100% { transform: translateY(0); }
+}
+
+.landingPageText {
+font-family: brother-1816;
+font-style: bold;
+font-weight: 1000;
+font-size: x-large;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em;
+  background-color: #b5c0d075;
+  backdrop-filter: blur(5px);
 }

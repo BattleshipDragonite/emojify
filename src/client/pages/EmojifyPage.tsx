@@ -66,7 +66,6 @@ const EmojifyPage = () => {
 
   return (
     <div>
-      <NavBar />
       <div
         style={{
           backgroundImage: `url(${Background})`,
@@ -78,6 +77,7 @@ const EmojifyPage = () => {
           backgroundAttachment: "fixed",
         }}
       >
+        <NavBar />
         <div className="flex flex-col items-center">
           <div className="flex justify-between w-full">
             <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />

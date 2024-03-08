@@ -1,18 +1,21 @@
 import React from "react";
 import { Button } from "flowbite-react";
+import logo from '../client/assets/EmojifyLogo.svg'
+import { useNavigate } from "react-router-dom";
 
 
 const NavBar = () => {
-
+    const navigate = useNavigate()
     const signout = () => {
         // Add sign out functionality here
         console.log('Sign out')
+        navigate('/')
     }
 
     return (
-        <div className="flex justify-between p-3 m-0 bg-indigo-500">
-            <h1>Emojify</h1>
-            <Button onClick={() => signout()} color="purple">Sign out</Button>
+        <div className="navbar">
+            <img src={logo} width='40px'/>
+            <Button onClick={() => signout()} gradientDuoTone="tealToLime">Sign out</Button>
         </div>
     )
 }
