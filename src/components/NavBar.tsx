@@ -10,7 +10,7 @@ const NavBar = () => {
     }
 
     return (
-        <div className="flex justify-between m-3">
+        <div className="flex justify-between p-3 m-0 bg-indigo-500">
             <h1>Emojify</h1>
             <Button onClick={() => signout()} color="purple">Sign out</Button>
         </div>

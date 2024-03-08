@@ -4,6 +4,7 @@ import {genresMap} from '../../server/utils/emojiDict.ts'
 import { Modal, Button } from 'flowbite-react'
 import { Metrics } from '../types.ts'
 import NavBar from "../../components/NavBar.tsx";
+import Background from '../assets/28011782_7301421.svg'
 
 const EmojifyPage = () => {
   const [genre, setGenre] = useState("🎼");
@@ -65,9 +66,9 @@ const EmojifyPage = () => {
   const genres = Object.keys(genresMap);
 
   return (
-    <>
+    <div>
     <NavBar />
-    <div id="user-interface">
+    <div id="user-interface" style={{backgroundImage: `url(${Background})`, height:'100vh', width: '100vw', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'repeat-y'}}>
     <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
       <div className="genre-div">
         <h1 className="text-8xl m-20">{genre}</h1>
@@ -185,7 +186,7 @@ const EmojifyPage = () => {
         </Modal.Footer>
       </Modal>
     </div>
-    </>
+      </div>
   );
 };
 
