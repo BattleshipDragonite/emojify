@@ -48,15 +48,15 @@ body {
 }
 
 #user-interface {
-  width: 50vw;
+  /* width: 50vw; */
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   align-items: center;
 }
 
 #mixer {
   background-color: #c5c5c5;
-  width: 75%;
+  width: 30%;
   border-radius: 0.5em;
   margin: 1em;
   padding: 1em;
@@ -86,7 +86,7 @@ body {
 
 #auxiliary {
   background-color: #c5c5c5;
-  width: 75%;
+  width: 30%;
   border-radius: 0.5em;
   margin: 1em;
   padding: 1em;
@@ -94,4 +94,9 @@ body {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.top-panel {
+  display: flex;
+  align-items: center;
 }

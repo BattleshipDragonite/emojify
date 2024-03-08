@@ -2,10 +2,9 @@ import React, { useState, useRef } from "react";
 import MetricChannel from "./MetricChannel";
 import AuxChannel from "./AuxChannel";
 
-const MetricsMixer = ({ currMetrics, setMetrics }) => {
+export const MetricsMixer = ({ currMetrics, setMetrics }) => {
 
   return (
-    <>
       <div id="mixer">
         <MetricChannel
           metric="acousticness"
@@ -107,6 +106,12 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           setMetrics={setMetrics}
         />
       </div>
+  )
+  }
+
+export const AuxMixer = ({ currMetrics, setMetrics }) => {
+
+return (
       <div id="auxiliary">
         <AuxChannel 
           metric="key"
@@ -150,8 +155,5 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           setMetrics={setMetrics}
         />
       </div>
-    </>
   );
 }
-
-export default MetricsMixer;

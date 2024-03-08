@@ -1,5 +1,6 @@
 import React from 'react'
 import Background from '../assets/28011782_7301421.svg'
+import Logo from '../assets/EmojifyLogo.jpeg'
 const LandingPage = () => {
 return (
     <>
