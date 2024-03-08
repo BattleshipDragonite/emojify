@@ -4,8 +4,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-const nodeExternals = require('webpack-node-externals');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = isProduction
@@ -13,17 +13,17 @@ const stylesHandler = isProduction
   : "style-loader";
 
 const config = {
-  entry: './src/index.tsx',
+  entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, "dist"),
   },
   devServer: {
     open: true,
-    host: 'localhost',
+    host: "localhost",
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: "index.html",
     }),
     new NodePolyfillPlugin(),
     // Add your plugins here
@@ -33,42 +33,58 @@ const config = {
     rules: [
       {
         test: /\.(ts|tsx)$/i,
-        loader: 'babel-loader',
-        exclude: ['/node_modules/'],
+        loader: "babel-loader",
+        exclude: ["/node_modules/"],
       },
       {
         test: /\.css$/i,
-        use: [stylesHandler, 'css-loader', 'postcss-loader'],
+        use: [stylesHandler, "css-loader", "postcss-loader"],
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [stylesHandler, 'css-loader', 'sass-loader', 'postcss-loader'],
+        use: [stylesHandler, "css-loader", "sass-loader", "postcss-loader"],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
+        type: "asset",
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
-      }
+        loader: "babel-loader",
+      },
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
-    fallback: { crypto: require.resolve("crypto-browserify"), fs: false, async_hooks: false }
+    extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      fs: false,
+      async_hooks: false,
+    },
   },
   devServer: {
     historyApiFallback: true,
     hot: true,
     static: {
-      directory: path.join(__dirname, 'dist')
+      directory: path.join(__dirname, "dist"),
     },
-  }
+    proxy: [
+      {
+        context: [
+          "/recommendations",
+          "/login",
+          "/refreshToken",
+          "/callback",
+          "/generatePlaylist",
+        ],
+        target: "http://localhost:3000",
+      },
+    ],
+  },
 };
 
 module.exports = () => {

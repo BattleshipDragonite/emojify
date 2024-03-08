@@ -7,9 +7,21 @@ import { generateRecommendationsURL, createRandomEmojiQuery } from '../utils/emo
 
 dotenv.config();
 
+
 export const generateRecommendations = (req: Request, res: Response, next: NextFunction): void => {
     const randomEmoji = createRandomEmojiQuery();
-    const recommendationURL = generateRecommendationsURL(randomEmoji);
+    const { genre, metrics } = req.body
+    console.log({metrics})
+    console.log({genre})
+    const metricsTestObj = {
+        danceability : .5,
+        tempo: 120,
+        loudness: -60,
+        valence: .5,
+        speechiness: .2,
+      }
+    const recommendationURL = generateRecommendationsURL(randomEmoji,metricsTestObj);
+    // const recommendationURL = "https://api.spotify.com/v1/recommendations?seed_genres=classical%2Ccountry"
     // pull access token from token.json. To do - refactor to session storage
     const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
     const accessToken = tokenData.access_token;
