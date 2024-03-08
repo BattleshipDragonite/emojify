@@ -151,7 +151,6 @@ export const genresMap: GenreMap = {
   "🌎": { type: "genre", value: "world-music" },
 };
 
-
 // TODO Delete if not used
 const metricsMap: MetricsMap = {
   "😐": {
@@ -289,10 +288,6 @@ const metricsOptionObj : any = {
   },
 }
 
-
-
-
-
 const recommendationsURL = "https://api.spotify.com/v1/recommendations"
 
 export const createRandomGenreEmoji = () : string => {
@@ -313,9 +308,6 @@ export const createRandomMetricsObject = () => {
   }
   return metricsObject;
 }
-
-
-
 
 export const createRandomEmojiQuery = (): string => {
   const genresOptions = Object.keys(genresMap);
@@ -360,6 +352,8 @@ export const generateRecommendationsURL = (emojis: string, metrics: {}): string 
     return "seed_genres=" + encodeURIComponent(genreList)
   }
 
+
+  // TO DELETE 
   const buildMetricsQuery = (metrics: [string, string, number][]): string => {
     // Build Metrics handling for duplicates and averages
     const metricsObject: MetricsObject = {}
@@ -384,20 +378,16 @@ export const generateRecommendationsURL = (emojis: string, metrics: {}): string 
     return "&" + metricList
   }
 
-  return recommendationsURL + "?limit=50&" + buildGenreQuery(seedGenres) // + parseMetrics(metrics)
+  const parseMetrics = (metricsObj: any) => {
+    return "&" + Object.entries(metricsObj).map(([metric,value],i)=>{
+      return `target_${metric}=${value}`;
+    }).join('&')
+  }
+
+  return recommendationsURL + "?limit=50&" + buildGenreQuery(seedGenres) + parseMetrics(metrics)
 }
 
 
-const metricsTestObj = {
-  danceability : .5,
-  tempo: 120,
-  loudness: -60,
-  valence: .5,
-  speechiness: .2,
-}
 
-const parseMetrics = (metricsObj: any) => {
-  return "&" + Object.entries(metricsObj).map(([metric,value],i)=>{
-    return `target_${metric}=${value}`;
-  }).join('&')
-}
+
+

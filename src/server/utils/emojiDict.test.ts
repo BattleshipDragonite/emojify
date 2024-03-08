@@ -23,8 +23,15 @@ describe("generateRecommendationsURL", () => {
       .mockReturnValueOnce("🎤"); // instrumentalness: 0
 
     const emojis = createRandomEmojiQuery(); // Assuming this generates a fixed sequence now due to mocks
-    
-    const url = generateRecommendationsURL(emojis);
+    const metrics =  {
+      danceability : .5,
+      tempo: 120,
+      loudness: -60,
+      valence: .5,
+      speechiness: .2,
+    }
+
+    const url = generateRecommendationsURL(emojis,metrics);
 
     expect(url).toContain('seed_genres=acoustic%2Cafrobeat');
     expect(url).toContain('target_danceability=0.5'); // Example check, adjust based on actual logic
@@ -34,8 +41,14 @@ describe("generateRecommendationsURL", () => {
   it('should generate a correct URL with no more than 5 genres', () => {
 
     const emojis = "🇧🇷🇯🇵" // Assuming this generates a fixed sequence now due to mocks
-    
-    const url = generateRecommendationsURL(emojis);
+    const metrics =  {
+      danceability : .5,
+      tempo: 120,
+      loudness: -60,
+      valence: .5,
+      speechiness: .2,
+    } 
+    const url = generateRecommendationsURL(emojis, metrics);
     const genresString =["bossanova", "brazil", "forro", "mpb", "pagode"].join("%2C")
     
     expect(url).toContain(`seed_genres=${genresString}`);    

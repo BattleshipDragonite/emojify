@@ -35,6 +35,8 @@ const EmojifyPage = () => {
   const searchFunction = async () => {
     // input params here
     // input fetch request to spotify API with params as body
+    if (genre === '🎼') {}
+    
     const recommendationObj = {
       genre: genre,
       metrics: metrics
