@@ -266,6 +266,11 @@ export const metricsOptionObj : any = {
     max: 1,
     type: "float"
   },
+  "speechiness": {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
   "valence" : {
     min: 0,
     max: 1,
