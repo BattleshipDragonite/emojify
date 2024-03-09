@@ -12,7 +12,7 @@ const VisualizerBar = ({ color, metric, metrics}) => {
     // const color: string = `hsl(0, 100%, ${70 - (height * 30)}%`;
     console.log(height);
     const divs: JSX.Element[] = [];
-    for (let i = 1; i < height * 10; i++) {
+    for (let i = 0; i < height * 10; i++) {
       // divs.push(<div className="pixel" style={{
       //   backgroundColor: color
       // }}></div>)
