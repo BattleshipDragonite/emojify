@@ -14,11 +14,11 @@ const MetricChannel = ({
 }: MetricChannelProps) => {
   const [sliderVal, setSliderVal] = useState<number | string>(step >= 1 ? defaultValue : defaultValue.toFixed(2));
 
-  const handleSliderInput = (e): void => {
+  const handleSliderInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const val: string = e.target?.value;
     setSliderVal(step >= 1 ? val : parseFloat(val).toFixed(2));
   }
-  const handleSliderChange = (e): void => {
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const val: string = e.target?.value;
     setMetrics({
       ...currMetrics,

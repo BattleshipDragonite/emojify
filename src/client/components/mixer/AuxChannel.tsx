@@ -12,11 +12,11 @@ const AuxChannel = ({
 }: AuxChannelProps) => {
   const [auxVal, setAuxVal] = useState<string>(possValues[defaultValue - min]);
   
-  const handleSliderInput = (e): void => {
+  const handleSliderInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const val: string = e.target?.value;
     setAuxVal(possValues[parseInt(val) - min]);
   }
-  const handleSliderChange = (e): void => {
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const val: string = e.target?.value;
     setMetrics({
       ...currMetrics,
