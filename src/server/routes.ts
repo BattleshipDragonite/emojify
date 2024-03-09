@@ -12,7 +12,7 @@ router.get("/login", createCredentialsObject, createAuthURL, (req, res) => {
 
 // callback used by Spotify for OAuth process
 router.get('/callback', getToken, async (req, res) => {
-    return res.status(200).json(res.locals.userData)
+    return res.redirect("http://localhost:8080/homepage")
 })
 
 // refresh Spotify token
