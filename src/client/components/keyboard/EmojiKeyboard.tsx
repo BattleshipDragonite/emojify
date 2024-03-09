@@ -1,6 +1,6 @@
 import React from "react";
 import EmojiKBDRow from "./EmojiKBDRow.tsx";
-import { genresMap } from "../../server/utils/emojiDict.ts";
+import { genresMap } from "../../../server/utils/emojiDict.ts";
 
 
 const EmojiKeyboard = ({ setGenre }) => {

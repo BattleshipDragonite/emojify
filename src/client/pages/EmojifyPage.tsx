@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { MetricsMixer, AuxMixer } from "../components/MetricsMixer";
-import EmojiKeyboard from "../components/EmojiKeyboard.tsx";
+import { MetricsMixer, AuxMixer } from "../components/mixer/MetricsMixer.tsx";
+import EmojiKeyboard from "../components/keyboard/EmojiKeyboard.tsx";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
 import NavBar from "../components/NavBar.tsx";
