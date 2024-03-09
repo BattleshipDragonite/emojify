@@ -5,15 +5,44 @@ html {
   background-color: #F2ECC9;
 }
 
-.genre-div {
-  background-color: silver;
+#display-div {
+  background-color: #505050;
+  color: #FFFFFF;
+  font-family: "Pixelify Sans", sans-serif;
   width: 500px;
+  height: 300px;
   border-radius: 0.15em;
-  box-shadow: inset;
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* align-self: center; */
+  flex-direction: column;
+  padding: 0;
+}
+
+#genre-display {
+  width: 100%;
+  height: 40%;
+  padding: 25px 20px;
+}
+
+#visualizer {
+  width: 100%;
+  height: 60%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  align-self: center;
+  align-items: flex-end;
+}
+
+.viz-bars {
+  width: 11.1111111%;
+}
+
+.pixel {
+  background-color: hsl(0, 100%, 50%);
+  border: 0.5px solid #505050 ;
+  height: 20px;
+  width: 100%;
 }
 
 #buttons-display,
@@ -78,6 +107,7 @@ body {
 }
 
 .metric-channel {
+  font-family: "Pixelify Sans";
   display: flex;
   flex-direction: column;
   align-items: center;
