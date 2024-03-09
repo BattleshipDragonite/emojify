@@ -1,9 +1,16 @@
 import React from "react";
+import VisualizerBar from "./VisualizerBar";
 
-const Display = ({ genre }) => {
+const Display = ({ genre, metrics }) => {
+  
   return (
-    <div className="genre-div">
-      <h1 className="text-8xl m-20">{genre}</h1>
+    <div id="display-div">
+      <div id="genre-display" className=" text-7xl">
+        Genre: {genre}
+      </div>
+      <div id="visualizer">
+        <VisualizerBar id="aco-viz" metrics={metrics}/>
+      </div>
     </div>
   );
 }
