@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MetricsMixer, AuxMixer } from "../components/MetricsMixer";
-import { EmojiKeyboard } from "../components/EmojiKeyboard.tsx"
+import EmojiKeyboard from "../components/EmojiKeyboard.tsx";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
 import NavBar from "../components/NavBar.tsx";
@@ -113,7 +113,7 @@ const EmojifyPage = () => {
 
             <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
           </div>
-          <EmojiKeyboard />
+          <EmojiKeyboard setGenre={setGenre}/>
         </div>
         {/* <div className="flex flex-col items-middle justify-center">
           <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
