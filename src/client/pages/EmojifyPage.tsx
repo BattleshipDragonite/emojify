@@ -106,11 +106,13 @@ const EmojifyPage = () => {
                 Find Songs 🎧
               </Button>
             </div>
+          </div>
+          <div id="buttons-display">
+            <EmojiKeyboard setGenre={setGenre}/>
             <div className="genre-div">
               <h1 className="text-8xl m-20">{genre}</h1>
             </div>
           </div>
-          <EmojiKeyboard setGenre={setGenre}/>
           <div id="user-interface">
             <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
             <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
