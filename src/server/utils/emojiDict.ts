@@ -123,7 +123,7 @@ export const genresMap: GenreMap = {
   "😵‍💫": { type: "genre", value: "psych-rock" },
   "🧨": { type: "genre", value: "punk" },
   "💣": { type: "genre", value: "punk-rock" },
-  "😮‍💨": { type: "genre", value: "r-n-b" },
+  "🫦": { type: "genre", value: "r-n-b" },
   "🌧️": { type: "genre", value: "rainy-day" },
   "🇨🇺": { type: "genre", value: ["reggaeton", "salsa"] },
   "🚗": { type: "genre", value: "road-trip" },
