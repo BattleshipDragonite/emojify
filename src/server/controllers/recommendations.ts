@@ -20,14 +20,16 @@ export const generateRecommendations = (req: Request, res: Response, next: NextF
         valence: .5,
         speechiness: .2,
       }
-    const recommendationURL = generateRecommendationsURL(randomEmoji,metricsTestObj);
+    const recommendationURL = generateRecommendationsURL(randomEmoji, metricsTestObj);
+    console.log('RECOMMENDATION URL IS ' + recommendationURL)
     // const recommendationURL = "https://api.spotify.com/v1/recommendations?seed_genres=classical%2Ccountry"
     // pull access token from token.json. To do - refactor to session storage
     const tokenData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../token.json'), 'utf8'));
     const accessToken = tokenData.access_token;
-
+    console.log({accessToken: accessToken})
     axios.get(recommendationURL, { headers: { Authorization: 'Bearer ' + accessToken } })
         .then((response) => {
+            console.log('access granted')
             const tracks = response.data.tracks;
             const sorted = tracks.sort((a: any, b: any) => b.popularity - a.popularity).filter((a: any) => a.preview_url)
             const recommendedTracks = []
