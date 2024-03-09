@@ -226,6 +226,11 @@ const metricsMap: MetricsMap = {
 }
 
 export const metricsOptionObj : any = {
+  "acousticness": {
+    min: 0,
+    max: 1,
+    type: "float"
+  },
   "danceability": {
     min: 0,
     max: 1,
