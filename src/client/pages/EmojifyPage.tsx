@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { MetricsMixer, AuxMixer } from "../components/mixer/MetricsMixer.tsx";
+import MetricsMixer from "../components/mixer/MetricsMixer.tsx";
+import AuxMixer from "../components/mixer/AuxMixer.tsx";
 import EmojiKeyboard from "../components/keyboard/EmojiKeyboard.tsx";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
@@ -89,8 +90,7 @@ const EmojifyPage = () => {
         <NavBar />
         <div className="flex flex-col items-center">
           <div className="flex justify-between w-full">
-            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
-
+            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
             <div className="flex flex-col mr-50 ml-50">
               <Button
                 onClick={() => playlistFunction()}
@@ -110,8 +110,7 @@ const EmojifyPage = () => {
                 Find Songs 🎧
               </Button>
             </div>
-
-            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
           </div>
           <EmojiKeyboard setGenre={setGenre}/>
         </div>
