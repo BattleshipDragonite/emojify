@@ -113,7 +113,7 @@ export const genresMap: GenreMap = {
   "🎞️": { type: "genre", value: ["movies", "pop-film"] },
   "🐣": { type: "genre", value: "new-age" },
   "⭐️": { type: "genre", value: "new-release" },
-  "🎭": { type: "genre", value: "opera" },
+  "🎭": { type: "genre", value: ["opera", "show-tunes"] },
   "🎉": { type: "genre", value: "party" },
   "🇵🇭": { type: "genre", value: "philippines-opm" },
   "🎹": { type: "genre", value: "piano" },
@@ -132,7 +132,6 @@ export const genresMap: GenreMap = {
   "🐐": { type: "genre", value: "rockabilly" },
   "🌹": { type: "genre", value: "romance" },
   "😔": { type: "genre", value: "sad" },
-  // "🎭": { type: "genre", value: "show-tunes" },
   "🎤": { type: "genre", value: "singer-songwriter" },
   "💤": { type: "genre", value: "sleep" },
   "👻": { type: "genre", value: "soul" },
@@ -164,7 +163,7 @@ const metricsMap: MetricsMap = {
     qualifier: "target_danceability",
     value: 1,
   },
-  "🎤": {
+  "🎙️": {
     type: "instrumentalness",
     qualifier: "target_instrumentalness",
     value: 0,
@@ -184,22 +183,12 @@ const metricsMap: MetricsMap = {
     qualifier: "target_energy",
     value: 1,
   },
-  "🦹": {
-    type: "mode",
-    qualifier: "target_mode",
-    value: 0
-  },
-  "🦸": {
-    type: "mode",
-    qualifier: "target_mode",
-    value: 1
-  },
-  "🧟‍♂️": {
+  "🎧": {
     type: "liveness",
     qualifier: "target_liveness",
     value: 0
   },
-  "🤸": {
+  "🎫": {
     type: "liveness",
     qualifier: "target_liveness",
     value: 1
@@ -236,7 +225,7 @@ const metricsMap: MetricsMap = {
   },
 }
 
-const metricsOptionObj : any = {
+export const metricsOptionObj : any = {
   "danceability": {
     min: 0,
     max: 1,
