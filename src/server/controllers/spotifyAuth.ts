@@ -70,7 +70,7 @@ export const getToken = (req: Request, res: Response, next: NextFunction): void 
         res.clearCookie(process.env.stateKey);
         axios.post(process.env.spotifyTokenURL, authOptions, config)
             .then((response) => {
-                fs.writeFile(path.join(__dirname, '../../token.json'), JSON.stringify(response.data), err => {
+                fs.writeFile(path.join(__dirname, '../../../token.json'), JSON.stringify(response.data), err => {
                     if (err) { console.log(err) }
                 })
                 res.locals.userData = response.data;
