@@ -8,6 +8,7 @@ const PlaylistSong = ({ title, artist, albumArt, preview, trackURI, playlistDraf
       <h1>{title}</h1>
       <h2>{artist}</h2>
       <audio src={preview} controls/>
+      <hr />
     </div>
   );
 }
