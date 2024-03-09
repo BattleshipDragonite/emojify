@@ -1,11 +1,5 @@
 import React from "react";
-
-type EmojiKBDRowProps = {
-  start: number,
-  end?: number,
-  genres: string[],
-  setGenre: (arg: string) => void
-}
+import { EmojiKBDRowProps } from "../../types";
 
 const EmojiKBDRow = ({
   start,
