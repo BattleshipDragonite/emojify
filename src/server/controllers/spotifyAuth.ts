@@ -43,13 +43,11 @@ export const createAuthURL = (req: Request, res: Response, next: NextFunction): 
     const authURL = `${process.env.spotifyAuthURL + credentialsString}`;
     res.locals.authURL = authURL;
     res.cookie(process.env.stateKey, state);
-    console.log('OAUTH route started')
     return next()
 }
 
 // gets access and refresh token as part of OAuth process
 export const getToken = (req: Request, res: Response, next: NextFunction): void => {
-    console.log('GET TOKEN ROUTE ')
     const { code, queryState } = req.query;
     const { cookieState } = req.cookies[process.env.stateKey]
     const redirectURI = `http://localhost:${process.env.PORT}/callback`
@@ -76,7 +74,6 @@ export const getToken = (req: Request, res: Response, next: NextFunction): void 
                     if (err) { console.log(err) }
                 })
                 res.locals.userData = response.data;
-                console.log('ACCESS TOKEN WRITTEN TO TOKEN.JSON')
                 next()
             }).catch((error) => {
                 console.log({ error })
