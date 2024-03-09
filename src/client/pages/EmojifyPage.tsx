@@ -7,6 +7,7 @@ import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
 import NavBar from "../components/NavBar.tsx";
 import Background from "../assets/28011782_7301421.svg";
+import PlaylistSong from "../components/PlaylistSong.tsx";
 
 const EmojifyPage = () => {
   const [genre, setGenre] = useState<string>("🎼");
@@ -26,9 +27,10 @@ const EmojifyPage = () => {
     mode: null,
     time_signature: null
   });
+
   const [songs, setSongs] = useState<Track[]>([])
   const [songIndex, setSongIndex] = useState<number>(0)
-  const [playlistDraft, setPlaylistDraft] = useState<string[]>([])
+  const [playlistDraft, setPlaylistDraft] = useState<Track[]>([])
 
   const nextSong = () => {
     if (songIndex != songs.length - 1) setSongIndex(songIndex + 1)
@@ -68,11 +70,25 @@ const EmojifyPage = () => {
     //TODO
     // Add a post req to "/generatePlaylist"
     // Request Object will be an array of trackIDs
+    // const playlistObj = {
+    //   name: name,
+    //   tracks: tracks
+    // }
+    // try {
+    //   const response = await fetch('/generatePlaylist', {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(playlistObj)
+    //   })
+    //   const result = await response.json();
+    //   console.log("Success", result)
     
   }
 
-  const addToPlaylist = (trackURI: string) => {
-    setPlaylistDraft([...playlistDraft, trackURI]);
+  const addToPlaylist = (song: Track) => {
+    setPlaylistDraft([...playlistDraft, song]);
   }
 
   return (
@@ -140,7 +156,7 @@ const EmojifyPage = () => {
             </div>
           </Modal.Body>
           <Modal.Footer className="flex justify-between">
-              <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
+              <Button color="purple" onClick={() => addToPlaylist(songs[songIndex])}>Add song</Button>
               <Button color="red" onClick={() => nextSong()}>Next Song</Button>
           </Modal.Footer>
         </Modal>
@@ -149,10 +165,26 @@ const EmojifyPage = () => {
           onClose={() => setOpenPlaylistModal(false)}
         >
           <Modal.Header>Playlist</Modal.Header>
-          <Modal.Body>{/* Add a playlist component here */}</Modal.Body>
+          <Modal.Body>
+            <div>
+              {playlistDraft.map((ele, key) => {
+                  return (
+                    <PlaylistSong
+                      title={ele.trackName}
+                      artist={ele.artistName}
+                      albumArt={ele.albumArtSmall}
+                      preview={ele.previewURL}
+                      trackURI={ele.trackURI}
+                      setPlaylistDraft={setPlaylistDraft}
+                      playlistDraft={playlistDraft}
+                    />
+                  )
+                }
+              )}
+            </div>
+          </Modal.Body>
           <Modal.Footer className="flex justify-between">
             <Button color="purple" onClick={() => setOpenPlaylistModal(false)}>
-              {" "}
               Add Playlist to Spotify
             </Button>
           </Modal.Footer>
