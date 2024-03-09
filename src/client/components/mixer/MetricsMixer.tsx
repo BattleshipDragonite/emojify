@@ -9,7 +9,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="acousticness"
           min={0}
           max={1}
-          defaultValue={0}
+          defaultValue={currMetrics.acousticness}
           step={0.01}
           maxEmoji="🏞️"
           minEmoji="🏙️"
@@ -20,7 +20,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="danceability"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.danceability}
           step={0.01}
           maxEmoji="🥳"
           minEmoji="😐"
@@ -31,7 +31,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="energy"
           min={0}
           max={1}
-          defaultValue={0.6}
+          defaultValue={currMetrics.energy}
           step={0.01}
           maxEmoji="🔋"
           minEmoji="🪫"
@@ -42,7 +42,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="instrumentalness"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.instrumentalness}
           step={0.01}
           maxEmoji="🎺"
           minEmoji="🎙️"
@@ -53,7 +53,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="liveness"
           min={0}
           max={1}
-          defaultValue={0.2}
+          defaultValue={currMetrics.liveness}
           step={0.01}
           maxEmoji="🎫"
           minEmoji="🎧"
@@ -64,7 +64,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="speechiness"
           min={0}
           max={1}
-          defaultValue={0.33}
+          defaultValue={currMetrics.speechiness}
           step={0.01}
           maxEmoji="🗣️"
           minEmoji="🎶"
@@ -75,7 +75,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="valence"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.valence}
           step={0.01}
           maxEmoji="🥹"
           minEmoji="🥺"
@@ -86,7 +86,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="loudness"
           min={-60}
           max={0}
-          defaultValue={-25}
+          defaultValue={currMetrics.loudness}
           step={1}
           maxEmoji="💥"
           minEmoji="🦗"
@@ -97,7 +97,7 @@ const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="tempo"
           min={0}
           max={240}
-          defaultValue={120}
+          defaultValue={currMetrics.tempo}
           step={1}
           maxEmoji="🚀"
           minEmoji="🐌"
