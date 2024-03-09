@@ -4,7 +4,7 @@ import { genresMap } from "../../server/utils/emojiDict.ts";
 
 
 const EmojiKeyboard = ({ setGenre }) => {
-  const genres = Object.keys(genresMap);
+  const genres: string[] = Object.keys(genresMap);
 
   return (
     <div className="keyboard">
