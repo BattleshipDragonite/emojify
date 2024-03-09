@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MetricsMixer from "../components/mixer/MetricsMixer.tsx";
 import AuxMixer from "../components/mixer/AuxMixer.tsx";
 import EmojiKeyboard from "../components/keyboard/EmojiKeyboard.tsx";
+import Display from "../components/Display.tsx";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
 import NavBar from "../components/NavBar.tsx";
@@ -109,9 +110,10 @@ const EmojifyPage = () => {
           </div>
           <div id="buttons-display">
             <EmojiKeyboard setGenre={setGenre}/>
-            <div className="genre-div">
+            {/* <div className="genre-div">
               <h1 className="text-8xl m-20">{genre}</h1>
-            </div>
+            </div> */}
+            <Display genre={genre}/>
           </div>
           <div id="user-interface">
             <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
