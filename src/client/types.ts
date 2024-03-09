@@ -15,6 +15,7 @@ export type Metrics = {
 
 export type Track = {
   albumArt: string
+  albumArtSmall: string
   albumName: string
   artistName: string
   trackName: string

@@ -20,7 +20,7 @@ export const generateRecommendations = (req: Request, res: Response, next: NextF
         valence: .5,
         speechiness: .2,
       }
-    const recommendationURL = generateRecommendationsURL(randomEmoji, metricsTestObj);
+    const recommendationURL = generateRecommendationsURL(genre === '🎼' ? randomEmoji : genre, metrics);
     console.log('RECOMMENDATION URL IS ' + recommendationURL)
     // const recommendationURL = "https://api.spotify.com/v1/recommendations?seed_genres=classical%2Ccountry"
     // pull access token from token.json. To do - refactor to session storage
@@ -36,6 +36,7 @@ export const generateRecommendations = (req: Request, res: Response, next: NextF
             for (let i = 0; i < 3; i++) {
                 recommendedTracks.push({
                     albumArt: sorted[i].album.images[1].url,
+                    albumArtSmall: sorted[i].album.images[2].url,
                     albumName: sorted[i].album.name,
                     artistName: sorted[i].artists[0].name,
                     trackName: sorted[i].name,
