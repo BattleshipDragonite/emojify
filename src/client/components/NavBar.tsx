@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "flowbite-react";
-import logo from '../client/assets/EmojifyLogo.svg'
+import logo from '../assets/EmojifyLogo.svg'
 import { useNavigate } from "react-router-dom";
 
 

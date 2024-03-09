@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { MetricsMixer, AuxMixer } from "../../components/MetricsMixer";
-import { genresMap } from "../../server/utils/emojiDict.ts";
+import MetricsMixer from "../components/mixer/MetricsMixer.tsx";
+import AuxMixer from "../components/mixer/AuxMixer.tsx";
+import EmojiKeyboard from "../components/keyboard/EmojiKeyboard.tsx";
+import Display from "../components/Display.tsx";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
-import NavBar from "../../components/NavBar.tsx";
+import NavBar from "../components/NavBar.tsx";
 import Background from "../assets/28011782_7301421.svg";
 
 const EmojifyPage = () => {
@@ -11,7 +13,7 @@ const EmojifyPage = () => {
   const [openSongsModal, setOpenSongsModal] = useState(false);
   const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
   const [metrics, setMetrics] = useState<Metrics>({
-    acousticness: 0,
+    acousticness: 0.1,
     danceability: 0.5,
     energy: 0.6,
     instrumentalness: 0.5,
@@ -72,7 +74,6 @@ const EmojifyPage = () => {
   const addToPlaylist = (trackURI: string) => {
     setPlaylistDraft([...playlistDraft, trackURI]);
   }
-  const genres = Object.keys(genresMap);
 
   return (
     <div>
@@ -88,10 +89,8 @@ const EmojifyPage = () => {
         }}
       >
         <NavBar />
-        <div className="flex flex-col items-center">
-          <div className="flex justify-between w-full">
-            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
-
+        <div id="main" className="flex flex-col items-center">
+          <div className="flex justify-evenly w-full">
             <div className="flex flex-col mr-50 ml-50">
               <Button
                 onClick={() => playlistFunction()}
@@ -100,9 +99,6 @@ const EmojifyPage = () => {
               >
                 View Playlist 🎶
               </Button>
-              <div className="genre-div">
-                <h1 className="text-8xl m-20">{genre}</h1>
-              </div>
               <Button
                 className="mb-10"
                 onClick={() => searchFunction()}
@@ -111,110 +107,43 @@ const EmojifyPage = () => {
                 Find Songs 🎧
               </Button>
             </div>
-
-            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
           </div>
-          <div className="keyboard">
-            <div className="flex">
-              {genres.slice(0, 20).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-            <div className="flex">
-              {genres.slice(20, 36).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-            <div className="flex">
-              {genres.slice(36, 55).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-
-            <div className="flex">
-              {genres.slice(55, 75).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-
-            <div className="flex">
-              {genres.slice(75, 90).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-
-            <div className="flex">
-              {genres.slice(90).map((ele) => {
-                return (
-                  <>
-                    <div className="keys" onClick={() => setGenre(ele)}>
-                      <h1>{ele}</h1>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
+          <div id="buttons-display">
+            <EmojiKeyboard setGenre={setGenre}/>
+            <Display genre={genre} metrics={metrics} />
+          </div>
+          <div id="user-interface">
+            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
           </div>
         </div>
         {/* <div className="flex flex-col items-middle justify-center">
           <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
+          <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
+        </div> */}
 
-      <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
-      </div> */}
+        <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
+          <Modal.Header>Selected Songs</Modal.Header>
+          <Modal.Body>
+            <div className="flex flex-col justify-center items-center">
+              <img src={songs[songIndex]?.albumArt} alt="Album art" />
+              <audio src={songs[songIndex]?.previewURL} controls />
 
-      <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
-        <Modal.Header>Selected Songs</Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col justify-center items-center">
-            <img src={songs[songIndex]?.albumArt} alt="Album art" />
-            <audio src={songs[songIndex]?.previewURL} controls />
-
-            <div className="space-y-6">
-              <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                {songs[songIndex]?.trackName}
-              </h2>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                {songs[songIndex]?.artistName}
-              </p>
+              <div className="space-y-6">
+                <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  {songs[songIndex]?.trackName}
+                </h2>
+                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  {songs[songIndex]?.artistName}
+                </p>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-between">
-            <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
-            <Button color="red" onClick={() => nextSong()}>Next Song</Button>
-        </Modal.Footer>
-      </Modal>
-
+          </Modal.Body>
+          <Modal.Footer className="flex justify-between">
+              <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
+              <Button color="red" onClick={() => nextSong()}>Next Song</Button>
+          </Modal.Footer>
+        </Modal>
         <Modal
           show={openPlaylistModal}
           onClose={() => setOpenPlaylistModal(false)}

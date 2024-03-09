@@ -44,3 +44,10 @@ export type AuxChannelProps = {
   currMetrics: Metrics
   setMetrics: (arg: Metrics) => void
 }
+
+export type EmojiKBDRowProps = {
+  start: number,
+  end?: number,
+  genres: string[],
+  setGenre: (arg: string) => void
+}

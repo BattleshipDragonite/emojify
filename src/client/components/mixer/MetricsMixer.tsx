@@ -1,8 +1,7 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import MetricChannel from "./MetricChannel";
-import AuxChannel from "./AuxChannel";
 
-export const MetricsMixer = ({ currMetrics, setMetrics }) => {
+const MetricsMixer = ({ currMetrics, setMetrics }) => {
 
   return (
       <div id="mixer">
@@ -10,7 +9,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="acousticness"
           min={0}
           max={1}
-          defaultValue={0}
+          defaultValue={currMetrics.acousticness}
           step={0.01}
           maxEmoji="🏞️"
           minEmoji="🏙️"
@@ -21,7 +20,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="danceability"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.danceability}
           step={0.01}
           maxEmoji="🥳"
           minEmoji="😐"
@@ -32,7 +31,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="energy"
           min={0}
           max={1}
-          defaultValue={0.6}
+          defaultValue={currMetrics.energy}
           step={0.01}
           maxEmoji="🔋"
           minEmoji="🪫"
@@ -43,7 +42,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="instrumentalness"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.instrumentalness}
           step={0.01}
           maxEmoji="🎺"
           minEmoji="🎙️"
@@ -54,7 +53,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="liveness"
           min={0}
           max={1}
-          defaultValue={0.2}
+          defaultValue={currMetrics.liveness}
           step={0.01}
           maxEmoji="🎫"
           minEmoji="🎧"
@@ -65,7 +64,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="speechiness"
           min={0}
           max={1}
-          defaultValue={0.33}
+          defaultValue={currMetrics.speechiness}
           step={0.01}
           maxEmoji="🗣️"
           minEmoji="🎶"
@@ -76,7 +75,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="valence"
           min={0}
           max={1}
-          defaultValue={0.5}
+          defaultValue={currMetrics.valence}
           step={0.01}
           maxEmoji="🥹"
           minEmoji="🥺"
@@ -87,7 +86,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="loudness"
           min={-60}
           max={0}
-          defaultValue={-25}
+          defaultValue={currMetrics.loudness}
           step={1}
           maxEmoji="💥"
           minEmoji="🦗"
@@ -98,7 +97,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           metric="tempo"
           min={0}
           max={240}
-          defaultValue={120}
+          defaultValue={currMetrics.tempo}
           step={1}
           maxEmoji="🚀"
           minEmoji="🐌"
@@ -106,54 +105,7 @@ export const MetricsMixer = ({ currMetrics, setMetrics }) => {
           setMetrics={setMetrics}
         />
       </div>
-  )
+    );
   }
 
-export const AuxMixer = ({ currMetrics, setMetrics }) => {
-
-return (
-      <div id="auxiliary">
-        <AuxChannel 
-          metric="key"
-          min={-1}
-          max={11}
-          defaultValue={0}
-          possValues={[
-            'n/a',
-            'C',
-            'C#/D♭',
-            'D',
-            'D#/E♭',
-            'E',
-            'F',
-            'F#/G♭',
-            'G',
-            'G#/A♭',
-            'A',
-            'A#/B♭',
-            'B'
-          ]}
-          currMetrics={currMetrics}
-          setMetrics={setMetrics}
-        />
-        <AuxChannel 
-          metric="mode"
-          min={0}
-          max={1}
-          defaultValue={1}
-          possValues={['minor', 'major']}
-          currMetrics={currMetrics}
-          setMetrics={setMetrics}
-        />
-        <AuxChannel 
-          metric="time_signature"
-          min={3}
-          max={7}
-          defaultValue={4}
-          possValues={['3/4', '4/4', '5/4', '6/4', '7/4']}
-          currMetrics={currMetrics}
-          setMetrics={setMetrics}
-        />
-      </div>
-  );
-}
+  export default MetricsMixer;
