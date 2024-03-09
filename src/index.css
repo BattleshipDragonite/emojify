@@ -16,10 +16,6 @@ html {
   align-self: center;
 }
 
-#main {
-  /* background-color: lime; */
-}
-
 #buttons-display,
 #user-interface {
   width: 95vw;
