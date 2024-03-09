@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AuxChannelProps } from "../client/types";
+import { AuxChannelProps } from "../types";
 
 const AuxChannel = ({
   metric,

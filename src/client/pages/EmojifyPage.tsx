@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { MetricsMixer, AuxMixer } from "../../components/MetricsMixer";
+import { MetricsMixer, AuxMixer } from "../components/MetricsMixer";
 import { genresMap } from "../../server/utils/emojiDict.ts";
 import { Modal, Button } from "flowbite-react";
 import { Metrics, Track } from "../types.ts";
-import NavBar from "../../components/NavBar.tsx";
+import NavBar from "../components/NavBar.tsx";
 import Background from "../assets/28011782_7301421.svg";
 
 const EmojifyPage = () => {
