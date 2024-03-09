@@ -13,7 +13,7 @@ const EmojifyPage = () => {
   const [openSongsModal, setOpenSongsModal] = useState(false);
   const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
   const [metrics, setMetrics] = useState<Metrics>({
-    acousticness: 0,
+    acousticness: 0.1,
     danceability: 0.5,
     energy: 0.6,
     instrumentalness: 0.5,
@@ -110,10 +110,7 @@ const EmojifyPage = () => {
           </div>
           <div id="buttons-display">
             <EmojiKeyboard setGenre={setGenre}/>
-            {/* <div className="genre-div">
-              <h1 className="text-8xl m-20">{genre}</h1>
-            </div> */}
-            <Display genre={genre}/>
+            <Display genre={genre} metrics={metrics} />
           </div>
           <div id="user-interface">
             <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
