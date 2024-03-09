@@ -88,9 +88,8 @@ const EmojifyPage = () => {
         }}
       >
         <NavBar />
-        <div className="flex flex-col items-center">
-          <div className="flex justify-between w-full">
-            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+        <div id="main" className="flex flex-col items-center">
+          <div className="flex justify-evenly w-full">
             <div className="flex flex-col mr-50 ml-50">
               <Button
                 onClick={() => playlistFunction()}
@@ -99,9 +98,6 @@ const EmojifyPage = () => {
               >
                 View Playlist 🎶
               </Button>
-              <div className="genre-div">
-                <h1 className="text-8xl m-20">{genre}</h1>
-              </div>
               <Button
                 className="mb-10"
                 onClick={() => searchFunction()}
@@ -110,39 +106,43 @@ const EmojifyPage = () => {
                 Find Songs 🎧
               </Button>
             </div>
-            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
+            <div className="genre-div">
+              <h1 className="text-8xl m-20">{genre}</h1>
+            </div>
           </div>
           <EmojiKeyboard setGenre={setGenre}/>
+          <div id="user-interface">
+            <MetricsMixer currMetrics={metrics} setMetrics={setMetrics} />
+            <AuxMixer currMetrics={metrics} setMetrics={setMetrics} />
+          </div>
         </div>
         {/* <div className="flex flex-col items-middle justify-center">
           <Button onClick={() => searchFunction()} color='purple'>Find Songs 🎧</Button>
+          <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
+        </div> */}
 
-      <Button onClick={() => playlistFunction()} className='m-3' gradientDuoTone="purpleToPink">View Playlist 🎶</Button>
-      </div> */}
+        <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
+          <Modal.Header>Selected Songs</Modal.Header>
+          <Modal.Body>
+            <div className="flex flex-col justify-center items-center">
+              <img src={songs[songIndex]?.albumArt} alt="Album art" />
+              <audio src={songs[songIndex]?.previewURL} controls />
 
-      <Modal show={openSongsModal} onClose={() => setOpenSongsModal(false)}>
-        <Modal.Header>Selected Songs</Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col justify-center items-center">
-            <img src={songs[songIndex]?.albumArt} alt="Album art" />
-            <audio src={songs[songIndex]?.previewURL} controls />
-
-            <div className="space-y-6">
-              <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                {songs[songIndex]?.trackName}
-              </h2>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                {songs[songIndex]?.artistName}
-              </p>
+              <div className="space-y-6">
+                <h2 className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  {songs[songIndex]?.trackName}
+                </h2>
+                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  {songs[songIndex]?.artistName}
+                </p>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-between">
-            <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
-            <Button color="red" onClick={() => nextSong()}>Next Song</Button>
-        </Modal.Footer>
-      </Modal>
-
+          </Modal.Body>
+          <Modal.Footer className="flex justify-between">
+              <Button color="purple" onClick={() => addToPlaylist(songs[songIndex].trackURI)}>Add song</Button>
+              <Button color="red" onClick={() => nextSong()}>Next Song</Button>
+          </Modal.Footer>
+        </Modal>
         <Modal
           show={openPlaylistModal}
           onClose={() => setOpenPlaylistModal(false)}
